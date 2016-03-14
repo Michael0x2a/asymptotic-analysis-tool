@@ -200,6 +200,14 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitMethodInvocation_lfno_primary(Java8Parser.MethodInvocation_lfno_primaryContext ctx) {
+        // TODO: Make method invocation less ghetto
+        String methodName = ctx.getText().split("\\(")[0];
+        List<AstNode> params = ctx.argumentList().children.stream().map(this::visit).collect(Collectors.toList());
+        return new Call(methodName, params);
+    }
+
+    @Override
     public AstNode visitAssignment(Java8Parser.AssignmentContext ctx) {
         if (ctx.leftHandSide().expressionName() != null) {
             String varName = ctx.leftHandSide().expressionName().getChild(0).getText();
@@ -455,7 +463,7 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
         } else if (ctx.expression() != null) {
             return this.visit(ctx.expression());
         } else if (ctx.methodInvocation_lfno_primary() != null) {
-            throw new UnsupportedOperationException("methodInvocation_lfno_primary");
+            return this.visit(ctx.methodInvocation_lfno_primary());
         } else if (ctx.methodReference_lfno_primary() != null) {
             throw new UnsupportedOperationException("methodReference_lfno_primary");
         } else if (ctx.fieldAccess_lfno_primary() != null) {
@@ -1401,11 +1409,6 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
 
     @Override
     public AstNode visitMethodInvocation_lf_primary(Java8Parser.MethodInvocation_lf_primaryContext ctx) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public AstNode visitMethodInvocation_lfno_primary(Java8Parser.MethodInvocation_lfno_primaryContext ctx) {
         throw new UnsupportedOperationException();
     }
 
