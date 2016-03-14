@@ -4,13 +4,13 @@ import java.util.List;
 
 public class ForLoop implements Expression {
     private Lookup counter;
-    private Lookup sequence;
+    private Expression end;
     private Expression change;
     private List<Expression> body;
 
-    public ForLoop(Lookup counter, Lookup sequence, Expression change, List<Expression> body) {
+    public ForLoop(Lookup counter, Expression end, Expression change, List<Expression> body) {
         this.counter = counter;
-        this.sequence = sequence;
+        this.end = end;
         this.change = change;
         this.body = body;
     }
@@ -19,8 +19,8 @@ public class ForLoop implements Expression {
         return this.counter;
     }
 
-    public Lookup getSequence() {
-        return this.sequence;
+    public Expression getEnd() {
+        return this.end;
     }
 
     public Expression getChange() {
