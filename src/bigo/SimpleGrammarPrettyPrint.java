@@ -151,4 +151,10 @@ public class SimpleGrammarPrettyPrint extends AstNodeVisitor<String> {
     public String visitType(Type node) {
         return "(Type " + node.getFullType() + ")";
     }
+
+    @Override
+    public String visitMultipleAstNodes(MultipleAstNodes node) {
+        return formatNode(node,
+                format("nodes", node.getNodes()));
+    }
 }

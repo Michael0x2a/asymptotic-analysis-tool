@@ -124,4 +124,9 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 	public MathExpression visitType(Type node) {
 		throw new IllegalStateException("asked for big-O runtime of a type declaration");
 	}
+
+    @Override
+    public MathExpression visitMultipleAstNodes(MultipleAstNodes node) {
+        throw new IllegalStateException("MultipleAstNodes should never be in the final AST");
+    }
 }

@@ -17,6 +17,7 @@ public abstract class AstNodeVisitor<T> {
     public abstract T visitUnaryOp(UnaryOp node);
     public abstract T visitLiteral(Literal node);
     public abstract T visitType(Type node);
+    public abstract T visitMultipleAstNodes(MultipleAstNodes node);
 
     public T visit(AstNode expr) {
         return expr.accept(this);

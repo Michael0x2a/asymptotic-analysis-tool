@@ -3,19 +3,19 @@ package simplegrammar;
 import java.util.List;
 
 public class ForLoop implements AstNode {
-    private Lookup counter;
+    private AstNode counter;
     private AstNode end;
     private AstNode change;
     private List<AstNode> body;
 
-    public ForLoop(Lookup counter, AstNode end, AstNode change, List<AstNode> body) {
+    public ForLoop(AstNode counter, AstNode end, AstNode change, List<AstNode> body) {
         this.counter = notNull(counter);
         this.end = notNull(end);
         this.change = notNull(change);
         this.body = notNull(body);
     }
 
-    public Lookup getCounter() {
+    public AstNode getCounter() {
         return this.counter;
     }
 

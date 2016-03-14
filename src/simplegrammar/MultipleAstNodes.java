@@ -33,6 +33,6 @@ public class MultipleAstNodes implements AstNode {
 
     @Override
     public <T> T accept(AstNodeVisitor<T> visitor) {
-        throw new UnsupportedOperationException();
+        return visitor.visitMultipleAstNodes(this);
     }
 }

@@ -86,15 +86,10 @@ public class Main {
             ParserRuleContext t = parser.compilationUnit();
             System.out.println(parser.getRuleNames()[t.getRuleIndex()]);
 
-            System.out.println(t.getRuleIndex());
-            System.out.println(t.toString());
-            System.out.println(t.getChild(0).getText());
-
             System.out.println(t.toStringTree(parser));
 
-
-            System.out.println(new SimpleGrammarPrettyPrint().visit(new SimplifierVisitor(parser).visit(t)));
             System.out.println(new PrettyPrintVisitor(parser).visit(t));
+            System.out.println(new SimpleGrammarPrettyPrint().visit(new SimplifierVisitor(parser).visit(t)));
         } catch (Exception e) {
             System.err.println("parser exception: " + e);
             e.printStackTrace();   // so we can get stack trace
