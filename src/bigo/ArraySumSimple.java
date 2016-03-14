@@ -8,7 +8,8 @@ import simplegrammar.*;
 public class ArraySumSimple {
 
 	public static void main(String[] args) {
-		System.out.println(new SimpleGrammarPrettyPrint().visit(get()));
+		// System.out.println(new SimpleGrammarPrettyPrint().visit(get()));
+		System.out.println(new BigOVisitor().visit(get()).toEquation());
 	}
 
 	public static ClassDecl get() {
