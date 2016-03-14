@@ -4,7 +4,7 @@ public class Literal implements AstNode {
     private String text;
 
     public Literal(String text) {
-        this.text = text;
+        this.text = notNull(text);
     }
 
     public String getText() {

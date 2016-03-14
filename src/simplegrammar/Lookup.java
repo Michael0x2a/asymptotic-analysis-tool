@@ -4,7 +4,7 @@ public class Lookup implements AstNode {
     private String name;
 
     public Lookup(String name) {
-        this.name = name;
+        this.name = notNull(name);
     }
 
     public String getName() {

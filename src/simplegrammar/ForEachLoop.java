@@ -8,9 +8,9 @@ public class ForEachLoop implements AstNode {
     private List<AstNode> body;
 
     public ForEachLoop(Lookup variable, Lookup sequence, List<AstNode> body) {
-        this.variable = variable;
-        this.sequence = sequence;
-        this.body = body;
+        this.variable = notNull(variable);
+        this.sequence = notNull(sequence);
+        this.body = notNull(body);
     }
 
     public Lookup getVariable() {

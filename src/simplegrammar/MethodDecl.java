@@ -9,10 +9,10 @@ public class MethodDecl implements AstNode {
     private List<AstNode> body;
 
     public MethodDecl(Type returnType, String name, List<Parameter> parameters, List<AstNode> body) {
-        this.returnType = returnType;
-        this.name = name;
-        this.parameters = parameters;
-        this.body = body;
+        this.returnType = notNull(returnType);
+        this.name = notNull(name);
+        this.parameters = notNull(parameters);
+        this.body = notNull(body);
     }
 
     public Type getReturnType() {

@@ -6,7 +6,7 @@ public class Type implements AstNode {
     private final String underlyingType;
 
     public Type(String type) {
-        this.fullType = type;
+        this.fullType = notNull(type);
         if (type.endsWith("[]")) {
             this.isArray = true;
             this.underlyingType = type.substring(0, type.length() - 2);

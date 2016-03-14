@@ -7,8 +7,8 @@ public class ClassDecl implements AstNode {
     private final String name;
 
     public ClassDecl(String name, List<MethodDecl> methods) {
-        this.methods = methods;
-        this.name = name;
+        this.methods = notNull(methods);
+        this.name = notNull(name);
     }
 
     public String getClassName() {

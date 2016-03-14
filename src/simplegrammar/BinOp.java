@@ -6,9 +6,9 @@ public class BinOp implements AstNode {
     private AstNode right;
 
     public BinOp(String operator, AstNode left, AstNode right) {
-        this.operator = operator;
-        this.left = left;
-        this.right = right;
+        this.operator = notNull(operator);
+        this.left = notNull(left);
+        this.right = notNull(right);
     }
 
     public String getOperator() {

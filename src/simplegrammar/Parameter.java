@@ -5,8 +5,8 @@ public class Parameter implements AstNode {
     private Type type;
 
     public Parameter(String name, Type type) {
-        this.name = name;
-        this.type = type;
+        this.name = notNull(name);
+        this.type = notNull(type);
     }
 
     public String getName() {

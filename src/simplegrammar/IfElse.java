@@ -8,9 +8,9 @@ public class IfElse implements AstNode {
     private List<AstNode> falseBranch;
 
     public IfElse(AstNode condition, List<AstNode> trueBranch, List<AstNode> falseBranch) {
-        this.condition = condition;
-        this.trueBranch = trueBranch;
-        this.falseBranch = falseBranch;
+        this.condition = notNull(condition);
+        this.trueBranch = notNull(trueBranch);
+        this.falseBranch = notNull(falseBranch);
     }
 
     public AstNode getCondition() {

@@ -5,8 +5,8 @@ public class VariableDecl implements AstNode {
     private String name;
 
     public VariableDecl(Type type, String name) {
-        this.type = type;
-        this.name = name;
+        this.type = notNull(type);
+        this.name = notNull(name);
     }
 
     public Type getType() {

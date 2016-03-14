@@ -5,8 +5,8 @@ public class UnaryOp implements AstNode {
     private AstNode value;
 
     public UnaryOp(String operator, AstNode value) {
-        this.operator = operator;
-        this.value = value;
+        this.operator = notNull(operator);
+        this.value = notNull(value);
     }
 
     public String getOperator() {

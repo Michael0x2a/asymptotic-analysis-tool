@@ -9,10 +9,10 @@ public class ForLoop implements AstNode {
     private List<AstNode> body;
 
     public ForLoop(Lookup counter, AstNode end, AstNode change, List<AstNode> body) {
-        this.counter = counter;
-        this.end = end;
-        this.change = change;
-        this.body = body;
+        this.counter = notNull(counter);
+        this.end = notNull(end);
+        this.change = notNull(change);
+        this.body = notNull(body);
     }
 
     public Lookup getCounter() {

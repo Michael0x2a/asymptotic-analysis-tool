@@ -5,8 +5,8 @@ public class Assignment implements AstNode {
     private AstNode value;
 
     public Assignment(String name, AstNode value) {
-        this.name = name;
-        this.value = value;
+        this.name = notNull(name);
+        this.value = notNull(value);
     }
 
     public String getName() {

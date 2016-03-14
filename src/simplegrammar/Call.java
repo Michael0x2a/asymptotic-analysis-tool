@@ -7,8 +7,8 @@ public class Call implements AstNode {
     private List<AstNode> parameters;
 
     public Call(String methodName, List<AstNode> parameters) {
-        this.methodName = methodName;
-        this.parameters = parameters;
+        this.methodName = notNull(methodName);
+        this.parameters = notNull(parameters);
     }
 
     public String getMethodName() {
