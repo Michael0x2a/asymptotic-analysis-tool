@@ -4,7 +4,7 @@ public class Parameter implements Expression {
     private String name;
     private Type type;
 
-    private Parameter(String name, Type type) {
+    public Parameter(String name, Type type) {
         this.name = name;
         this.type = type;
     }
