@@ -5,12 +5,12 @@ import java.util.StringJoiner;
 
 public class Multiplication implements MathExpression {
 
-	private List<MathExpression> terms;
-	
+	protected List<MathExpression> terms;
+
 	public Multiplication(List<MathExpression> terms) {
 		this.terms = terms;
 	}
-	
+
 	@Override
 	public String nodeName() {
 		return "*";
