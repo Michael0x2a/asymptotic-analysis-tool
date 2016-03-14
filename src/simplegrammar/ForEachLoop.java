@@ -2,12 +2,12 @@ package simplegrammar;
 
 import java.util.List;
 
-public class ForEachLoop implements Expression {
+public class ForEachLoop implements AstNode {
     private Lookup variable;
     private Lookup sequence;
-    private List<Expression> body;
+    private List<AstNode> body;
 
-    public ForEachLoop(Lookup variable, Lookup sequence, List<Expression> body) {
+    public ForEachLoop(Lookup variable, Lookup sequence, List<AstNode> body) {
         this.variable = variable;
         this.sequence = sequence;
         this.body = body;
@@ -21,7 +21,7 @@ public class ForEachLoop implements Expression {
         return this.sequence;
     }
 
-    public List<Expression> getBody() {
+    public List<AstNode> getBody() {
         return this.body;
     }
 
@@ -36,7 +36,7 @@ public class ForEachLoop implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitForEachLoop(this);
     }
 }

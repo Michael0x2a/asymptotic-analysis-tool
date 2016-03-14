@@ -1,10 +1,10 @@
 package simplegrammar;
 
-public class Assignment implements Expression {
+public class Assignment implements AstNode {
     private String name;
-    private Expression value;
+    private AstNode value;
 
-    public Assignment(String name, Expression value) {
+    public Assignment(String name, AstNode value) {
         this.name = name;
         this.value = value;
     }
@@ -13,7 +13,7 @@ public class Assignment implements Expression {
         return this.name;
     }
 
-    public Expression getValue() {
+    public AstNode getValue() {
         return this.value;
     }
 
@@ -28,7 +28,7 @@ public class Assignment implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitAssignment(this);
     }
 }

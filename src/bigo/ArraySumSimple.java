@@ -22,7 +22,7 @@ public class ArraySumSimple {
 
 		Return ret = new Return(l("sum"));
 
-		MethodDecl methodSumDecl = new MethodDecl("sum",
+		MethodDecl methodSumDecl = new MethodDecl(new Type("int"), "sum",
 				list(p("array", "int[]")),
 				list(varSumDecl, varSumInitial, forEachLoop, ret));
 

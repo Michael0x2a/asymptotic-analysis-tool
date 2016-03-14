@@ -1,9 +1,9 @@
 package simplegrammar;
 
-public class Type {
+public class Type implements AstNode {
     public final String fullType;
     public final boolean isArray;
-    public final String underlyingType;
+    private final String underlyingType;
 
     public Type(String type) {
         this.fullType = type;
@@ -16,4 +16,30 @@ public class Type {
         }
     }
 
+    public String getFullType() {
+        return this.fullType;
+    }
+
+    public boolean isArray() {
+        return this.isArray;
+    }
+
+    public String getUnderlyingType() {
+        return this.underlyingType;
+    }
+
+    @Override
+    public String nodeName() {
+        return "Type";
+    }
+
+    @Override
+    public boolean isTerminal() {
+        return true;
+    }
+
+    @Override
+    public <T> T accept(AstNodeVisitor<T> visitor) {
+        return visitor.visitType(this);
+    }
 }

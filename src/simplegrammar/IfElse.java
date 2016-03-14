@@ -2,26 +2,26 @@ package simplegrammar;
 
 import java.util.List;
 
-public class IfElse implements Expression {
-    private Expression condition;
-    private List<Expression> trueBranch;
-    private List<Expression> falseBranch;
+public class IfElse implements AstNode {
+    private AstNode condition;
+    private List<AstNode> trueBranch;
+    private List<AstNode> falseBranch;
 
-    public IfElse(Expression condition, List<Expression> trueBranch, List<Expression> falseBranch) {
+    public IfElse(AstNode condition, List<AstNode> trueBranch, List<AstNode> falseBranch) {
         this.condition = condition;
         this.trueBranch = trueBranch;
         this.falseBranch = falseBranch;
     }
 
-    public Expression getCondition() {
+    public AstNode getCondition() {
         return this.condition;
     }
 
-    public List<Expression> getTrueBranch() {
+    public List<AstNode> getTrueBranch() {
         return this.trueBranch;
     }
 
-    public List<Expression> getFalseBranch() {
+    public List<AstNode> getFalseBranch() {
         return this.falseBranch;
     }
 
@@ -36,7 +36,7 @@ public class IfElse implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitIfElse(this);
     }
 }

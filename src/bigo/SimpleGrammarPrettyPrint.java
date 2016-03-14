@@ -4,7 +4,7 @@ import simplegrammar.*;
 
 import java.util.List;
 
-public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
+public class SimpleGrammarPrettyPrint extends AstNodeVisitor<String> {
     private String indent(StringBuilder build) {
         String out = "";
         for (String line : build.toString().split("\n")) {
@@ -13,7 +13,7 @@ public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
         return out;
     }
 
-    private String formatNode(Expression node, String... items) {
+    private String formatNode(AstNode node, String... items) {
         StringBuilder out = new StringBuilder();
         for (String item : items) {
             out.append(item);
@@ -22,7 +22,7 @@ public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
         return "(" + node.nodeName() + "\n" + this.indent(out) + ")";
     }
 
-    private <T extends Expression> String format(String name, List<T> expressions) {
+    private <T extends AstNode> String format(String name, List<T> expressions) {
         StringBuilder out = new StringBuilder();
         for (T expr : expressions) {
             out.append(this.visit(expr));
@@ -35,11 +35,7 @@ public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
         return name + ": " + value;
     }
 
-    private String format(String name, Type type) {
-        return name + ": " + type.fullType;
-    }
-
-    private String format(String name, Expression expression) {
+    private String format(String name, AstNode expression) {
         return name + ": " + this.visit(expression);
     }
 
@@ -53,6 +49,7 @@ public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
     @Override
     public String visitMethodDecl(MethodDecl node) {
         return formatNode(node,
+                format("type", node.getReturnType()),
                 format("name", node.getName()),
                 format("params", node.getParameters()),
                 format("body", node.getBody()));
@@ -148,5 +145,10 @@ public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
     @Override
     public String visitLiteral(Literal node) {
         return "(Literal " + node.getText() + ")";
+    }
+
+    @Override
+    public String visitType(Type node) {
+        return "(Type " + node.getFullType() + ")";
     }
 }

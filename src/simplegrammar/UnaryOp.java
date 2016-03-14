@@ -1,10 +1,10 @@
 package simplegrammar;
 
-public class UnaryOp implements Expression {
+public class UnaryOp implements AstNode {
     private String operator;
-    private Expression value;
+    private AstNode value;
 
-    public UnaryOp(String operator, Expression value) {
+    public UnaryOp(String operator, AstNode value) {
         this.operator = operator;
         this.value = value;
     }
@@ -13,7 +13,7 @@ public class UnaryOp implements Expression {
         return this.operator;
     }
 
-    public Expression getValue() {
+    public AstNode getValue() {
         return this.value;
     }
 
@@ -28,7 +28,7 @@ public class UnaryOp implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitUnaryOp(this);
     }
 }

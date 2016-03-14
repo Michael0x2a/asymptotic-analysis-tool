@@ -1,6 +1,6 @@
 package simplegrammar;
 
-public class Lookup implements Expression {
+public class Lookup implements AstNode {
     private String name;
 
     public Lookup(String name) {
@@ -22,7 +22,7 @@ public class Lookup implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitLookup(this);
     }
 }

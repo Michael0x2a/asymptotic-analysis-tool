@@ -2,7 +2,7 @@ package simplegrammar;
 
 import java.util.List;
 
-public class ClassDecl implements Expression {
+public class ClassDecl implements AstNode {
     private final List<MethodDecl> methods;
     private final String name;
 
@@ -39,7 +39,7 @@ public class ClassDecl implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitClassDecl(this);
     }
 }

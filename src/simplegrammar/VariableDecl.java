@@ -1,6 +1,6 @@
 package simplegrammar;
 
-public class VariableDecl implements Expression {
+public class VariableDecl implements AstNode {
     private Type type;
     private String name;
 
@@ -28,7 +28,7 @@ public class VariableDecl implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitVariableDecl(this);
     }
 }

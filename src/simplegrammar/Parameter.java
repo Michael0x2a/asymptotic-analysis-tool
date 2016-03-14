@@ -1,6 +1,6 @@
 package simplegrammar;
 
-public class Parameter implements Expression {
+public class Parameter implements AstNode {
     private String name;
     private Type type;
 
@@ -28,7 +28,7 @@ public class Parameter implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitParameter(this);
     }
 }

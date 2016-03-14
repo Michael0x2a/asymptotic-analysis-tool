@@ -1,11 +1,11 @@
 package simplegrammar;
 
-public class BinOp implements Expression {
+public class BinOp implements AstNode {
     private String operator;
-    private Expression left;
-    private Expression right;
+    private AstNode left;
+    private AstNode right;
 
-    public BinOp(String operator, Expression left, Expression right) {
+    public BinOp(String operator, AstNode left, AstNode right) {
         this.operator = operator;
         this.left = left;
         this.right = right;
@@ -15,11 +15,11 @@ public class BinOp implements Expression {
         return this.operator;
     }
 
-    public Expression getLeft() {
+    public AstNode getLeft() {
         return this.left;
     }
 
-    public Expression getRight() {
+    public AstNode getRight() {
         return this.right;
     }
 
@@ -34,7 +34,7 @@ public class BinOp implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitBinOp(this);
     }
 }

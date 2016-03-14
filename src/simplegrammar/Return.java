@@ -1,13 +1,13 @@
 package simplegrammar;
 
-public class Return implements Expression {
-    private Expression value;
+public class Return implements AstNode {
+    private AstNode value;
 
-    public Return(Expression value) {
+    public Return(AstNode value) {
         this.value = value;
     }
 
-    public Expression getValue() {
+    public AstNode getValue() {
         return this.value;
     }
 
@@ -22,7 +22,7 @@ public class Return implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitReturn(this);
     }
 }

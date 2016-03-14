@@ -2,11 +2,11 @@ package simplegrammar;
 
 import java.util.List;
 
-public class Call implements Expression {
+public class Call implements AstNode {
     private String methodName;
-    private List<Expression> parameters;
+    private List<AstNode> parameters;
 
-    public Call(String methodName, List<Expression> parameters) {
+    public Call(String methodName, List<AstNode> parameters) {
         this.methodName = methodName;
         this.parameters = parameters;
     }
@@ -15,7 +15,7 @@ public class Call implements Expression {
         return this.methodName;
     }
 
-    public List<Expression> getParameters() {
+    public List<AstNode> getParameters() {
         return this.parameters;
     }
 
@@ -30,7 +30,7 @@ public class Call implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitCall(this);
     }
 }

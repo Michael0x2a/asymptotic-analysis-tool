@@ -1,6 +1,6 @@
 package simplegrammar;
 
-public class Literal implements Expression {
+public class Literal implements AstNode {
     private String text;
 
     public Literal(String text) {
@@ -22,7 +22,7 @@ public class Literal implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitLiteral(this);
     }
 }

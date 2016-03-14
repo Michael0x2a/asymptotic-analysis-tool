@@ -2,15 +2,21 @@ package simplegrammar;
 
 import java.util.List;
 
-public class MethodDecl implements Expression {
+public class MethodDecl implements AstNode {
+    private Type returnType;
     private String name;
     private List<Parameter> parameters;
-    private List<Expression> body;
+    private List<AstNode> body;
 
-    public MethodDecl(String name, List<Parameter> parameters, List<Expression> body) {
+    public MethodDecl(Type returnType, String name, List<Parameter> parameters, List<AstNode> body) {
+        this.returnType = returnType;
         this.name = name;
         this.parameters = parameters;
         this.body = body;
+    }
+
+    public Type getReturnType() {
+        return this.returnType;
     }
 
     public String getName() {
@@ -25,7 +31,7 @@ public class MethodDecl implements Expression {
         return null;
     }
 
-    public List<Expression> getBody() {
+    public List<AstNode> getBody() {
         return this.body;
     }
 
@@ -40,7 +46,7 @@ public class MethodDecl implements Expression {
     }
 
     @Override
-    public <T> T accept(ExpressionVisitor<T> visitor) {
+    public <T> T accept(AstNodeVisitor<T> visitor) {
         return visitor.visitMethodDecl(this);
     }
 }

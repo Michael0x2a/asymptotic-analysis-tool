@@ -1,5 +1,6 @@
 package main;
 
+import bigo.SimpleGrammarPrettyPrint;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import grammar.*;
 import visitors.PrettyPrintVisitor;
+import visitors.SimplifierVisitor;
 
 public class Main {
     public static void main(String[] args) {
@@ -90,6 +92,8 @@ public class Main {
 
             System.out.println(t.toStringTree(parser));
 
+
+            System.out.println(new SimpleGrammarPrettyPrint().visit(new SimplifierVisitor(parser).visit(t)));
             System.out.println(new PrettyPrintVisitor(parser).visit(t));
         } catch (Exception e) {
             System.err.println("parser exception: " + e);

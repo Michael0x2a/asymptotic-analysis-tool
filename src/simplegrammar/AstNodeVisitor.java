@@ -1,6 +1,6 @@
 package simplegrammar;
 
-public abstract class ExpressionVisitor<T> {
+public abstract class AstNodeVisitor<T> {
     public abstract T visitClassDecl(ClassDecl node);
     public abstract T visitMethodDecl(MethodDecl node);
     public abstract T visitParameter(Parameter node);
@@ -16,8 +16,9 @@ public abstract class ExpressionVisitor<T> {
     public abstract T visitBinOp(BinOp node);
     public abstract T visitUnaryOp(UnaryOp node);
     public abstract T visitLiteral(Literal node);
+    public abstract T visitType(Type node);
 
-    public T visit(Expression expr) {
+    public T visit(AstNode expr) {
         return expr.accept(this);
     }
 }
