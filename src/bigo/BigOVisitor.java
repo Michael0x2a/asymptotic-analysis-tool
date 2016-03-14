@@ -54,10 +54,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     	}
     	
     	// Visit body
-    	List<MathExpression> body = new ArrayList<>();
-    	for (AstNode n : node.getBody())
-    		body.add(visit(n));
-    	return new Addition(body);
+    	return new Addition(addAstNodes(node.getBody()));
         
     }
 
@@ -102,11 +99,8 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     			}
 
     			// Now we can generate the multiplication
-				List<MathExpression> bodySum = new ArrayList<>();
-				for (AstNode statement : bodyStatements)
-					bodySum.add(visit(statement));
 				List<MathExpression> total = new ArrayList<>();
-				total.add(new Addition(bodySum));
+				total.add(addAstNodes(bodyStatements));
 				total.add(assumptions.containsKey(name)
 						? assumptions.get(name) 
 						: outputComplexities.get(name));
@@ -134,10 +128,8 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     @Override
     public MathExpression visitIfElse(IfElse node) {
     	List<MathExpression> body = new ArrayList<>();
-    	for (AstNode n : node.getFalseBranch())
-    		body.add(visit(n));
-    	for (AstNode n : node.getTrueBranch())
-    		body.add(visit(n));
+    	body.add(addAstNodes(node.getFalseBranch()));
+    	body.add(addAstNodes(node.getTrueBranch()));
     	return new Addition(body);
     }
 
@@ -148,11 +140,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     		return new Constant(3);
     	case "arrayget":
     	case "arrayput":
-    		List<MathExpression> list = new ArrayList<>();
-    		for (AstNode n : node.getParameters()) {
-    			list.add(visit(n));
-    		}
-            return new Addition(list);
+            return addAstNodes(node.getParameters());
     		default:
     			throw new IllegalArgumentException("what's " + node.getMethodName());
     	}
@@ -192,8 +180,11 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
         throw new IllegalStateException("MultipleAstNodes should never be in the final AST");
     }
     
-    private void addToExpressionsTable(String variable, MathExpression expression) {
-    	outputComplexities.put(variable, expression);
+    private MathExpression addAstNodes(List<AstNode> list) {
+    	List<MathExpression> sum = new ArrayList<>();
+    	for (AstNode node : list)
+    		sum.add(visit(node));
+    	return new Addition(sum);
     }
     
     private void addToAssumptionsTable(String variable) {
