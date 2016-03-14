@@ -1,0 +1,1 @@
+Please see the wiki for more info: https://bitbucket.org/JavaScriptBach/penguins/wiki/Home
