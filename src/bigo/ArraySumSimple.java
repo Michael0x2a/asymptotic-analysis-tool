@@ -7,6 +7,10 @@ import simplegrammar.*;
 
 public class ArraySumSimple {
 
+	public static void main(String[] args) {
+		System.out.println(new SimpleGrammarPrettyPrint().visit(get()));
+	}
+
 	public static ClassDecl get() {
 		VariableDecl varSumDecl = new VariableDecl(t("int"), "sum");
 		Assignment varSumInitial = new Assignment("sum", lit("0"));
