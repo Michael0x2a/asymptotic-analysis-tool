@@ -1,20 +1,13 @@
 package bigo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import simplegrammar.*;
 
-public class ArraySumSimple extends ClassDecl {
+public class ArraySumSimple {
 
 	public static ClassDecl get() {
-		return new ArraySumSimple();
-	}
-
-	public ArraySumSimple() {
-		super("ArraySum", new ArrayList<>());
-
 		VariableDecl varSumDecl = new VariableDecl(t("int"), "sum");
 		Assignment varSumInitial = new Assignment("sum", lit("0"));
 
@@ -29,7 +22,9 @@ public class ArraySumSimple extends ClassDecl {
 				list(p("array", "int[]")),
 				list(varSumDecl, varSumInitial, forEachLoop, ret));
 
-		getMethods().add(methodSumDecl);
+		ClassDecl arraySum = new ClassDecl("ArraySum", list(methodSumDecl));
+
+		return arraySum;
 	}
 
 	@SafeVarargs
