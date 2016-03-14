@@ -16,10 +16,10 @@ public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
     private String formatNode(Expression node, String... items) {
         StringBuilder out = new StringBuilder();
         for (String item : items) {
-            out.append(out);
+            out.append(item);
             out.append("\n");
         }
-        return "(" + node.nodeName() + "\n" + this.indent(out) + "\n)\n";
+        return "(" + node.nodeName() + "\n" + this.indent(out) + ")";
     }
 
     private <T extends Expression> String format(String name, List<T> expressions) {
@@ -28,7 +28,7 @@ public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
             out.append(this.visit(expr));
             out.append("\n");
         }
-        return name + ": [" + this.indent(out) + "]";
+        return name + ": [\n" + this.indent(out) + "]";
     }
 
     private String format(String name, String value) {
@@ -46,6 +46,7 @@ public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
     @Override
     public String visitClassDecl(ClassDecl node) {
         return formatNode(node,
+                format("className", node.getClassName()),
                 format("methods", node.getMethods()));
     }
 
@@ -80,7 +81,7 @@ public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
 
     @Override
     public String visitLookup(Lookup node) {
-        return "(Lookup name: " + node.getName() + ")\n";
+        return "(Lookup name: " + node.getName() + ")";
     }
 
     @Override
@@ -146,6 +147,6 @@ public class SimpleGrammarPrettyPrint extends ExpressionVisitor<String> {
 
     @Override
     public String visitLiteral(Literal node) {
-        return "(Literal " + node.getText() + ")\n";
+        return "(Literal " + node.getText() + ")";
     }
 }
