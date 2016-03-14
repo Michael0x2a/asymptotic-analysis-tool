@@ -47,19 +47,21 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitForEachLoop(ForEachLoop node) {
-        return formatNode(node,
+        throw new UnsupportedOperationException("TODO");
+        /*return formatNode(node,
                 format("variable", node.getVariable()),
                 format("sequence", node.getSequence()),
-                format("body", node.getBody()));
+                format("body", node.getBody()));*/
     }
 
     @Override
     public MathExpression visitForLoop(ForLoop node) {
-        return formatNode(node,
+        throw new UnsupportedOperationException("TODO");
+        /*return formatNode(node,
                 format("counter", node.getCounter()),
                 format("end", node.getEnd()),
                 format("change", node.getChange()),
-                format("body", node.getBody()));
+                format("body", node.getBody()));*/
     }
 
     @Override

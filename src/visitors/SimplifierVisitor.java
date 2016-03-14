@@ -53,10 +53,7 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
         parameters.add((Parameter) this.visit(paramsCtx.lastFormalParameter().formalParameter()));
 
         MultipleAstNodes nodes = (MultipleAstNodes) this.visit(bodyCtx.block());
-        List<AstNode> body = nodes.getNodes();
-        body.add(new Literal(bodyCtx.toStringTree(this.parser)));
-
-        return new MethodDecl(returnType, methodName, parameters, body);
+        return new MethodDecl(returnType, methodName, parameters, nodes.getNodes());
     }
 
     @Override
@@ -96,7 +93,81 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
 
     @Override
     public AstNode visitStatement(Java8Parser.StatementContext ctx) {
+        return this.visit(ctx.getChild(0));
+    }
+
+    @Override
+    public AstNode visitStatementExpression(Java8Parser.StatementExpressionContext ctx) {
+        return this.visit(ctx.getChild(0));
+    }
+
+    @Override
+    public AstNode visitStatementWithoutTrailingSubstatement(Java8Parser.StatementWithoutTrailingSubstatementContext ctx) {
+        if (ctx.returnStatement() != null) {
+            return new Return(this.visit(ctx.returnStatement().expression()));
+        } else if (ctx.emptyStatement() != null) {
+            return new MultipleAstNodes();  // Return empty list
+        } else if (ctx.expressionStatement() != null) {
+            return this.visit(ctx.expressionStatement().statementExpression());
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
+    public AstNode visitLabeledStatement(Java8Parser.LabeledStatementContext ctx) {
+        throw new UnsupportedOperationException("labeledStatement is not supported");
+    }
+
+    @Override
+    public AstNode visitIfThenElseStatement(Java8Parser.IfThenElseStatementContext ctx) {
         return new Literal(ctx.toStringTree(this.parser));
+    }
+
+    @Override
+    public AstNode visitIfThenStatement(Java8Parser.IfThenStatementContext ctx) {
+        return new Literal(ctx.toStringTree(this.parser));
+    }
+
+    @Override
+    public AstNode visitWhileStatement(Java8Parser.WhileStatementContext ctx) {
+        throw new UnsupportedOperationException("While statement");
+    }
+
+    @Override
+    public AstNode visitForStatement(Java8Parser.ForStatementContext ctx) {
+        if (ctx.enhancedForStatement() != null) {
+            Type varType = (Type) this.visit(ctx.enhancedForStatement().unannType());
+            String varName = ctx.enhancedForStatement().variableDeclaratorId().getChild(0).getText();
+            AstNode seq = this.visit(ctx.enhancedForStatement().expression());
+
+            List<AstNode> body = new ArrayList<>();
+            AstNode bodyNode = this.visit(ctx.enhancedForStatement().statement());
+            if (bodyNode instanceof MultipleAstNodes) {
+                body.addAll(((MultipleAstNodes) bodyNode).getNodes());
+            } else {
+                body.add(bodyNode);
+            }
+
+            return new MultipleAstNodes(
+                    new VariableDecl(varType, varName),
+                    new ForEachLoop(new Lookup(varName), seq, body));
+        } else {
+            throw new UnsupportedOperationException("Regular for loops");
+        }
+    }
+
+    @Override
+    public AstNode visitAssignment(Java8Parser.AssignmentContext ctx) {
+        String varName = ctx.leftHandSide().expressionName().getChild(0).getText();
+        String op = ctx.assignmentOperator().getChild(0).getText();
+        AstNode expr = this.visit(ctx.expression());
+
+        if (op.equals("=")) {
+            return new Assignment(varName, expr);
+        } else {
+            return new Assignment(varName, new BinOp(op.substring(0, 1), new Lookup(varName), expr));
+        }
     }
 
     @Override
@@ -112,7 +183,6 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
                 declarations.add(new Assignment(variableName, this.visit(variable.variableInitializer())));
             }
         }
-        System.out.println(declarations);
         return new MultipleAstNodes(declarations);
     }
 
@@ -126,13 +196,16 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
         if (ctx.lambdaExpression() != null) {
             throw new UnsupportedOperationException("Lambda expressions are not supported");
         }
+        return this.visit(ctx.assignmentExpression());
+    }
 
-        Java8Parser.AssignmentExpressionContext asgn = ctx.assignmentExpression();
-        if (asgn.assignment() != null) {
+    @Override
+    public AstNode visitAssignmentExpression(Java8Parser.AssignmentExpressionContext ctx) {
+        if (ctx.assignment() != null) {
             throw new UnsupportedOperationException("Inline assignment is not supported");
         }
 
-        Java8Parser.ConditionalExpressionContext cond = asgn.conditionalExpression();
+        Java8Parser.ConditionalExpressionContext cond = ctx.conditionalExpression();
         if (cond.children.size() > 1) {
             throw new UnsupportedOperationException("Ternary is not supported");
         }
@@ -259,9 +332,9 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
     @Override
     public AstNode visitUnaryExpression(Java8Parser.UnaryExpressionContext ctx) {
         if (ctx.preIncrementExpression() != null) {
-            return new UnaryOp("++", this.visit(ctx.unaryExpression()));
+            return this.visit(ctx.preIncrementExpression());
         } else if (ctx.preDecrementExpression() != null) {
-            return new UnaryOp("--", this.visit(ctx.unaryExpression()));
+            return this.visit(ctx.preIncrementExpression());
         } else if (ctx.unaryExpressionNotPlusMinus() != null){
             return this.visit(ctx.unaryExpressionNotPlusMinus());
         } else {
@@ -276,18 +349,47 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
         } else if (ctx.castExpression() != null) {
             throw new UnsupportedOperationException("Casts are not supported");
         } else {
-            Java8Parser.PostfixExpressionContext postfix = ctx.postfixExpression();
-            AstNode var;
-            if (postfix.primary() != null) {
-                var = new Literal(postfix.primary().getText());
-            } else {
-                var = new Lookup(postfix.expressionName().getText());
-            }
-            if (postfix.children.size() > 1) {
-                return new UnaryOp(ctx.getChild(1).getText(), var);
-            } else {
-                return var;
-            }
+            return this.visit(ctx.postfixExpression());
         }
+    }
+
+    @Override
+    public AstNode visitPostfixExpression(Java8Parser.PostfixExpressionContext ctx) {
+        AstNode var;
+        if (ctx.primary() != null) {
+            var = new Literal(ctx.primary().getText());
+        } else {
+            var = new Lookup(ctx.expressionName().getText());
+        }
+        if (ctx.children.size() > 1) {
+            return new UnaryOp(ctx.getChild(1).getText(), var);
+        } else {
+            return var;
+        }
+    }
+
+    @Override
+    public AstNode visitPreIncrementExpression(Java8Parser.PreIncrementExpressionContext ctx) {
+        return new UnaryOp("++", this.visit(ctx.unaryExpression()));
+    }
+
+    @Override
+    public AstNode visitPreDecrementExpression(Java8Parser.PreDecrementExpressionContext ctx) {
+        return new UnaryOp("--", this.visit(ctx.unaryExpression()));
+    }
+
+    @Override
+    public AstNode visitPostIncrementExpression(Java8Parser.PostIncrementExpressionContext ctx) {
+        return new UnaryOp("++", this.visit(ctx.postfixExpression()));
+    }
+
+    @Override
+    public AstNode visitPostDecrementExpression(Java8Parser.PostDecrementExpressionContext ctx) {
+        return new UnaryOp("--", this.visit(ctx.postfixExpression()));
+    }
+
+    @Override
+    public AstNode visitClassInstanceCreationExpression(Java8Parser.ClassInstanceCreationExpressionContext ctx) {
+        throw new UnsupportedOperationException("ClassInstanceCreationExpression not supported");
     }
 }

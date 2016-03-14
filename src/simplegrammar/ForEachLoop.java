@@ -4,10 +4,10 @@ import java.util.List;
 
 public class ForEachLoop implements AstNode {
     private Lookup variable;
-    private Lookup sequence;
+    private AstNode sequence;
     private List<AstNode> body;
 
-    public ForEachLoop(Lookup variable, Lookup sequence, List<AstNode> body) {
+    public ForEachLoop(Lookup variable, AstNode sequence, List<AstNode> body) {
         this.variable = notNull(variable);
         this.sequence = notNull(sequence);
         this.body = notNull(body);
@@ -17,7 +17,7 @@ public class ForEachLoop implements AstNode {
         return this.variable;
     }
 
-    public Lookup getSequence() {
+    public AstNode getSequence() {
         return this.sequence;
     }
 

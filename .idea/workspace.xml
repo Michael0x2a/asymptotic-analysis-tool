@@ -3,23 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a61b35fc-e859-4454-8bcf-56fe6a264c41" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sample/Test.java" afterPath="$PROJECT_DIR$/sample/Test.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/Assignment.java" afterPath="$PROJECT_DIR$/src/simplegrammar/Assignment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/AstNode.java" afterPath="$PROJECT_DIR$/src/simplegrammar/AstNode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/BinOp.java" afterPath="$PROJECT_DIR$/src/simplegrammar/BinOp.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/Call.java" afterPath="$PROJECT_DIR$/src/simplegrammar/Call.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/ClassDecl.java" afterPath="$PROJECT_DIR$/src/simplegrammar/ClassDecl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/bigo/BigOVisitor.java" afterPath="$PROJECT_DIR$/src/bigo/BigOVisitor.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/ForEachLoop.java" afterPath="$PROJECT_DIR$/src/simplegrammar/ForEachLoop.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/ForLoop.java" afterPath="$PROJECT_DIR$/src/simplegrammar/ForLoop.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/IfElse.java" afterPath="$PROJECT_DIR$/src/simplegrammar/IfElse.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/Literal.java" afterPath="$PROJECT_DIR$/src/simplegrammar/Literal.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/Lookup.java" afterPath="$PROJECT_DIR$/src/simplegrammar/Lookup.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/MethodDecl.java" afterPath="$PROJECT_DIR$/src/simplegrammar/MethodDecl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/Parameter.java" afterPath="$PROJECT_DIR$/src/simplegrammar/Parameter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/SpecialCall.java" afterPath="$PROJECT_DIR$/src/simplegrammar/SpecialCall.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/Type.java" afterPath="$PROJECT_DIR$/src/simplegrammar/Type.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/UnaryOp.java" afterPath="$PROJECT_DIR$/src/simplegrammar/UnaryOp.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simplegrammar/VariableDecl.java" afterPath="$PROJECT_DIR$/src/simplegrammar/VariableDecl.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/visitors/SimplifierVisitor.java" afterPath="$PROJECT_DIR$/src/visitors/SimplifierVisitor.java" />
     </list>
     <ignored path="penguins.iws" />
@@ -43,41 +28,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AstNodeVisitor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simplegrammar/AstNodeVisitor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MethodDecl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simplegrammar/MethodDecl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Type.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simplegrammar/Type.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SimplifierVisitor.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SimplifierVisitor.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/visitors/SimplifierVisitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="89" column="19" selection-start-line="89" selection-start-column="19" selection-end-line="89" selection-end-column="19" />
+            <state vertical-scroll-proportion="0.47424892">
+              <caret line="184" column="8" selection-start-line="184" selection-start-column="8" selection-end-line="184" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -85,63 +40,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UnaryOp.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simplegrammar/UnaryOp.java">
+      <file leaf-file-name="ForEachLoop.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/simplegrammar/ForEachLoop.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="40" selection-start-line="7" selection-start-column="40" selection-end-line="7" selection-end-column="40" />
+              <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VariableDecl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simplegrammar/VariableDecl.java">
+      <file leaf-file-name="ArraySum.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sample/ArraySum.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
+            <state vertical-scroll-proportion="-1.8888888">
+              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MultipleAstNodes.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/simplegrammar/MultipleAstNodes.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.51829267">
-              <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Parameter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simplegrammar/Parameter.java">
+      <file leaf-file-name="Java8.g4" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Java8.g4">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Return.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simplegrammar/Return.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SpecialCall.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simplegrammar/SpecialCall.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="44" selection-start-line="12" selection-start-column="44" selection-end-line="12" selection-end-column="44" />
+              <caret line="784" column="0" selection-start-line="784" selection-start-column="0" selection-end-line="784" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -184,7 +107,6 @@
         <option value="$PROJECT_DIR$/src/simplegrammar/BinOp.java" />
         <option value="$PROJECT_DIR$/src/simplegrammar/Call.java" />
         <option value="$PROJECT_DIR$/src/simplegrammar/ClassDecl.java" />
-        <option value="$PROJECT_DIR$/src/simplegrammar/ForEachLoop.java" />
         <option value="$PROJECT_DIR$/src/simplegrammar/ForLoop.java" />
         <option value="$PROJECT_DIR$/src/simplegrammar/IfElse.java" />
         <option value="$PROJECT_DIR$/src/simplegrammar/Literal.java" />
@@ -197,8 +119,11 @@
         <option value="$PROJECT_DIR$/src/simplegrammar/UnaryOp.java" />
         <option value="$PROJECT_DIR$/src/simplegrammar/VariableDecl.java" />
         <option value="$PROJECT_DIR$/src/simplegrammar/AstNodeVisitor.java" />
-        <option value="$PROJECT_DIR$/src/visitors/SimplifierVisitor.java" />
         <option value="$PROJECT_DIR$/src/simplegrammar/MultipleAstNodes.java" />
+        <option value="$PROJECT_DIR$/src/bigo/BigOVisitor.java" />
+        <option value="$PROJECT_DIR$/sample/ArraySum.java" />
+        <option value="$PROJECT_DIR$/src/simplegrammar/ForEachLoop.java" />
+        <option value="$PROJECT_DIR$/src/visitors/SimplifierVisitor.java" />
       </list>
     </option>
   </component>
@@ -993,12 +918,12 @@
       <option name="number" value="Default" />
       <updated>1457900992928</updated>
       <workItem from="1457901000342" duration="18751000" />
-      <workItem from="1457926557297" duration="10769000" />
+      <workItem from="1457926557297" duration="13359000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29520000" />
+    <option name="totallyTimeSpent" value="32110000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="886" extended-state="6" />
@@ -1013,7 +938,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5412371" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36340207" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1475" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1055,14 +980,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/simplegrammar/AstNodeVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="42" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/bigo/SimpleGrammarPrettyPrint.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1258,41 +1175,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sample/ArraySum.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.27586207">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/bigo/ArraySumSimple.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6490909">
-          <caret line="24" column="62" selection-start-line="24" selection-start-column="62" selection-end-line="24" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Java8.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="959" column="9" selection-start-line="959" selection-start-column="9" selection-end-line="959" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sample/Test.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/bigo/SimpleGrammarPrettyPrint.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1333,14 +1219,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simplegrammar/ForEachLoop.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="32" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
           <folding />
         </state>
       </provider>
@@ -1441,20 +1319,68 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/visitors/SimplifierVisitor.java">
+    <entry file="file://$PROJECT_DIR$/src/simplegrammar/MultipleAstNodes.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="89" column="19" selection-start-line="89" selection-start-column="19" selection-end-line="89" selection-end-column="19" />
+        <state vertical-scroll-proportion="0.51829267">
+          <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/simplegrammar/MultipleAstNodes.java">
+    <entry file="file://$PROJECT_DIR$/src/bigo/SimpleGrammarPrettyPrint.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51829267">
-          <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
+        <state vertical-scroll-proportion="0.051829267">
+          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/bigo/ArraySumSimple.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="62" selection-start-line="24" selection-start-column="62" selection-end-line="24" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/bigo/BigOVisitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.10944206">
+          <caret line="50" column="26" selection-start-line="50" selection-start-column="26" selection-end-line="50" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sample/ArraySum.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.8888888">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simplegrammar/ForEachLoop.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Java8.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="784" column="0" selection-start-line="784" selection-start-column="0" selection-end-line="784" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/visitors/SimplifierVisitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.47424892">
+          <caret line="184" column="8" selection-start-line="184" selection-start-column="8" selection-end-line="184" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
