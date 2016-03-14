@@ -50,10 +50,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     public MathExpression visitMethodDecl(MethodDecl node) {
     	// Add parameters to our assumptions
     	for (Parameter p : node.getParameters()) {
-    		if (symbols.isEmpty()) {
-    			throw new IllegalStateException("Ran out of abstract symbols!");
-    		}
-    		assumptions.put(p.getName(), symbols.remove());
+    		addToAssumptionsTable(p.getName());
     	}
     	
     	// Visit body
@@ -76,17 +73,14 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitAssignment(Assignment node) {
-    	// TODO: update maps
+    	// Calculate this node's value by visiting it.
+    	// Then, put it in the output complexities map, overwriting if necessary,
+    	// and remove it from the assumptions map if present.
     	String variableName = node.getName();
-    	AstNode value = node.getValue();
-    	if (!assumptions.containsKey(variableName)) {
-    		// This is a local variable assignment
-    		// calculate its value if possible and overwrite its entry in outputComplexities
-    	} else {
-    		// This is overwriting a parameter
-    		// calculate its value if possible, overwrite its entry in output complexities, and remove it from assumptions
-    	}
-        return visit(node.getValue());
+    	MathExpression value = visit(node.getValue());
+    	outputComplexities.put(variableName, value);
+    	assumptions.remove(variableName);
+    	return value;
     }
 
     @Override
@@ -101,17 +95,22 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     	switch(sequence.nodeName()) {
     		case "Lookup":
     			Lookup lookupNode = (Lookup)sequence;
-    			if (assumptions.containsKey(lookupNode.getName())) {
-    				List<MathExpression> bodySum = new ArrayList<>();
-    				for (AstNode statement : bodyStatements)
-    					bodySum.add(visit(statement));
-    				List<MathExpression> total = new ArrayList<>();
-    				total.add(new Addition(bodySum));
-    				total.add(assumptions.get(lookupNode.getName()));
-    				return new Multiplication(total);
-    			} else {
-    				throw new UnsupportedOperationException(lookupNode.getName());
+    			String name = lookupNode.getName();
+    			if (!assumptions.containsKey(name) && !outputComplexities.containsKey(name)) {
+    				// We haven't seen this lookup yet, so cop out and introduce it.
+    				addToAssumptionsTable(name);
     			}
+
+    			// Now we can generate the multiplication
+				List<MathExpression> bodySum = new ArrayList<>();
+				for (AstNode statement : bodyStatements)
+					bodySum.add(visit(statement));
+				List<MathExpression> total = new ArrayList<>();
+				total.add(new Addition(bodySum));
+				total.add(assumptions.containsKey(name)
+						? assumptions.get(name) 
+						: outputComplexities.get(name));
+				return new Multiplication(total);
     		default:
     			throw new UnsupportedOperationException("what's " + node.nodeName() + "?");
     	}
@@ -191,5 +190,17 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     @Override
     public MathExpression visitMultipleAstNodes(MultipleAstNodes node) {
         throw new IllegalStateException("MultipleAstNodes should never be in the final AST");
+    }
+    
+    private void addToExpressionsTable(String variable, MathExpression expression) {
+    	outputComplexities.put(variable, expression);
+    }
+    
+    private void addToAssumptionsTable(String variable) {
+    	if (symbols.isEmpty()) {
+			throw new IllegalStateException("Ran out of abstract symbols!");
+		}
+		assumptions.put(variable, symbols.remove());
+    	
     }
 }
