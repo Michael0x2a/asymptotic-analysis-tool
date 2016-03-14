@@ -22,10 +22,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitMethodDecl(MethodDecl node) {
-        return formatNode(node,
-                format("name", node.getName()),
-                format("params", node.getParameters()),
-                format("body", node.getBody()));
+        return new Constant(1);
     }
 
     @Override
@@ -72,7 +69,12 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitIfElse(IfElse node) {
-        return new Addition(visit(node.getFalseBranch()), visit(node.getTrueBranch()));
+    	List<MathExpression> body = new ArrayList<>();
+    	for (AstNode n : node.getFalseBranch())
+    		body.add(visit(n));
+    	for (AstNode n : node.getTrueBranch())
+    		body.add(visit(n));
+    	return new Addition(body);
     }
 
     @Override
@@ -94,7 +96,8 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitCall(Call node) {
-        throw new RuntimeException("Call is not yet implemented");
+    	// TODO
+        throw new UnsupportedOperationException("Call is not yet implemented");
     }
 
     @Override
