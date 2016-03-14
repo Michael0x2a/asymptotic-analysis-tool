@@ -12,6 +12,7 @@ import java.util.Queue;
 import math.Addition;
 import math.Constant;
 import math.MathExpression;
+import math.Multiplication;
 import math.Variable;
 
 public class BigOVisitor extends AstNodeVisitor<MathExpression> {
@@ -52,7 +53,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     		if (symbols.isEmpty()) {
     			throw new IllegalStateException("Ran out of abstract symbols!");
     		}
-    		assumptions.put(p.toString(), symbols.remove());
+    		assumptions.put(p.getName(), symbols.remove());
     	}
     	
     	// Visit body
@@ -95,11 +96,25 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitForEachLoop(ForEachLoop node) {
-//        throw new UnsupportedOperationException("TODO");
-        /*return formatNode(node,
-                format("variable", node.getVariable()),
-                format("sequence", node.getSequence()),
-                format("body", node.getBody()));*/
+    	AstNode sequence = node.getSequence();
+    	List<AstNode> bodyStatements = node.getBody();
+    	switch(sequence.nodeName()) {
+    		case "Lookup":
+    			Lookup lookupNode = (Lookup)sequence;
+    			if (assumptions.containsKey(lookupNode.getName())) {
+    				List<MathExpression> bodySum = new ArrayList<>();
+    				for (AstNode statement : bodyStatements)
+    					bodySum.add(visit(statement));
+    				List<MathExpression> total = new ArrayList<>();
+    				total.add(new Addition(bodySum));
+    				total.add(assumptions.get(lookupNode.getName()));
+    				return new Multiplication(total);
+    			} else {
+    				throw new UnsupportedOperationException(lookupNode.getName());
+    			}
+    		default:
+    			throw new UnsupportedOperationException("what's " + node.nodeName() + "?");
+    	}
     }
 
     @Override
