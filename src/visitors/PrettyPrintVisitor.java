@@ -2,11 +2,8 @@ package visitors;
 
 import grammar.Java8BaseVisitor;
 import grammar.Java8Parser;
-import grammar.Java8Visitor;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class PrettyPrintVisitor extends Java8BaseVisitor<String> {
