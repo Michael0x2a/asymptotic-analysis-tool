@@ -23,7 +23,7 @@ public class Addition implements MathExpression {
 
 	@Override
 	public String toEquation() {
-		StringJoiner output = new StringJoiner("+");
+		StringJoiner output = new StringJoiner("+", "(", ")");
 		for (MathExpression e : terms) {
 			output.add(e.toEquation());
 		}
