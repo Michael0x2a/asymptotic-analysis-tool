@@ -1,20 +1,23 @@
 package simplegrammar;
 
-public interface ExpressionVisitor<T> {
-    T visitClassDecl(ClassDecl node);
-    T visitMethodDecl(MethodDecl node);
-    T visitParameter(Parameter node);
-    T visitVariableDecl(VariableDecl node);
-    T visitAssignment(Assignment node);
-    T visitLookup(Lookup node);
-    T visitForEachLoop(ForEachLoop node);
-    T visitForLoop(ForLoop node);
-    T visitReturn(Return node);
-    T visitIfElse(IfElse node);
-    T visitSpecialCall(SpecialCall node);
-    T visitCall(Call node);
-    T visitBinOp(BinOp node);
-    T visitUnaryOp(UnaryOp node);
-    T visitLiteral(Literal node);
-    T visit(Expression expr);
+public abstract class ExpressionVisitor<T> {
+    public abstract T visitClassDecl(ClassDecl node);
+    public abstract T visitMethodDecl(MethodDecl node);
+    public abstract T visitParameter(Parameter node);
+    public abstract T visitVariableDecl(VariableDecl node);
+    public abstract T visitAssignment(Assignment node);
+    public abstract T visitLookup(Lookup node);
+    public abstract T visitForEachLoop(ForEachLoop node);
+    public abstract T visitForLoop(ForLoop node);
+    public abstract T visitReturn(Return node);
+    public abstract T visitIfElse(IfElse node);
+    public abstract T visitSpecialCall(SpecialCall node);
+    public abstract T visitCall(Call node);
+    public abstract T visitBinOp(BinOp node);
+    public abstract T visitUnaryOp(UnaryOp node);
+    public abstract T visitLiteral(Literal node);
+
+    public T visit(Expression expr) {
+        return expr.accept(this);
+    }
 }
