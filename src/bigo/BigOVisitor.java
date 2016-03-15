@@ -4,6 +4,7 @@ import simplegrammar.*;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import math.Addition;
 import math.Constant;
@@ -12,6 +13,7 @@ import math.MathExpression;
 import math.Multiplication;
 import math.Subtraction;
 import math.Variable;
+import math.Function;
 
 public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     private OutputComplexityVisitor outputComplexity;
@@ -29,6 +31,8 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     public BigOVisitor() {
         this.outputComplexity = new OutputComplexityVisitor();
         this.methodRuntimeComplexities = new HashMap<>();
+        this.methodRuntimeComplexities.put("System.out.println", new Constant(1));
+        this.methodSymbolVariables = new HashMap<>();
         Queue<String> functionSymbols = new LinkedList<>(Arrays.asList(FUNCTION_NAME));
         this.functionGenId = functionSymbols::remove;
     }
@@ -179,8 +183,23 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitCall(Call node) {
-        // TODO
-        throw new UnsupportedOperationException("Call is not yet implemented");
+        String methodName = node.getMethodName();
+        List<MathExpression> runtime = node.getParameters().stream()
+                .map(this::visit).collect(Collectors.toList());
+
+        List<MathExpression> output = node.getParameters().stream()
+                .map(this.outputComplexity::lookupExpression).collect(Collectors.toList());
+
+        if (this.methodRuntimeComplexities.containsKey(methodName)) {
+            runtime.add(this.methodRuntimeComplexities.get(methodName));
+            return new Addition(runtime);
+        } else if (this.methodSymbolVariables.containsKey(methodName)) {
+            Variable symbol = this.methodSymbolVariables.get(methodName);
+            runtime.add(new Function(symbol.getName(), output));
+        } else {
+            throw new IllegalStateException("Unrecognized function " + methodName);
+        }
+        return new Addition(runtime);
     }
 
     @Override
