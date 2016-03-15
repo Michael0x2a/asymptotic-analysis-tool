@@ -3,6 +3,7 @@ package bigo;
 import simplegrammar.*;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import math.Addition;
 import math.Constant;
@@ -13,11 +14,21 @@ import math.Variable;
 public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     private OutputComplexityVisitor outputComplexity;
     private Map<String, MathExpression> methodRuntimeComplexities;
+    private Map<String, Variable> methodSymbolVariables;
+
+    private final Supplier<String> functionGenId;
+
+    private static final String[] FUNCTION_NAME = {
+            "T", "S", "F", "N", "M", "A", "B",
+            "C", "D", "E", "F", "G", "H", "I",
+            "J", "K", "L", "P", "Q", "R", "U",
+            "V", "W", "X", "Y", "Z"};
 
     public BigOVisitor() {
         this.outputComplexity = new OutputComplexityVisitor();
         this.methodRuntimeComplexities = new HashMap<>();
-        this.methodRuntimeComplexities.put("System.out.println", new Constant(1));
+        Queue<String> functionSymbols = new LinkedList<>(Arrays.asList(FUNCTION_NAME));
+        this.functionGenId = functionSymbols::remove;
     }
 
     @Override
@@ -25,6 +36,10 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
         List<MethodDecl> methods = node.getMethods();
         if (methods.isEmpty()) {
             throw new IllegalArgumentException("Class needs at least one method");
+        }
+        // Forward declare all variables
+        for (MethodDecl method : methods) {
+            this.methodSymbolVariables.put(method.getName(), new Variable(this.functionGenId.get()));
         }
         for (MethodDecl method : methods) {
             this.methodRuntimeComplexities.put(method.getName(), this.visit(method));
