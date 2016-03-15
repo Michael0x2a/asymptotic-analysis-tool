@@ -14,7 +14,7 @@ import grammar.Java8Parser;
 import simplegrammar.*;
 import visitors.SimplifierVisitor;
 
-public class SelectionSort {
+public class NestedFor {
 
 	public static void main(String[] args) throws IOException {
 		System.out.println(new SimpleGrammarPrettyPrint().visit(get()));
@@ -23,7 +23,7 @@ public class SelectionSort {
 
 	public static AstNode get() throws IOException {
 		// Create a scanner that reads from the input stream passed to us
-        Lexer lexer = new Java8Lexer(new ANTLRFileStream("sample/SelectionSort.java"));
+        Lexer lexer = new Java8Lexer(new ANTLRFileStream("sample/NestedFor.java"));
 
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 

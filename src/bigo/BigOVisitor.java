@@ -8,8 +8,11 @@ import java.util.stream.Collectors;
 
 import math.Addition;
 import math.Constant;
+import math.Division;
 import math.MathExpression;
 import math.Multiplication;
+import math.Subtraction;
+import math.Sum;
 import math.Variable;
 import math.Function;
 
@@ -33,6 +36,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
         this.methodSymbolVariables = new HashMap<>();
         Queue<String> functionSymbols = new LinkedList<>(Arrays.asList(FUNCTION_NAME));
         this.functionGenId = functionSymbols::remove;
+        this.methodSymbolVariables = new HashMap<>();
     }
 
     @Override
@@ -100,9 +104,92 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
         return new Multiplication(Arrays.asList(outerRuntime, bodyRuntime));
     }
 
+    // TODO: add the cost of evaluating the start, end, and change
     @Override
     public MathExpression visitForLoop(ForLoop node) {
-        throw new UnsupportedOperationException("TODO");
+    	AstNode counter = node.getCounter();
+    	AstNode end = node.getEnd();
+    	AstNode change = node.getChange();
+    	MathExpression startComplexity, endComplexity, bodyComplexity;
+    	String loopVariable;
+    	switch (counter.nodeName()) {
+    		case "Assignment": 
+	    		startComplexity = this.outputComplexity.visit(((Assignment)counter).getValue());
+	    		loopVariable = ((Assignment)counter).getName();
+	    		break;
+    		default:
+    			throw new IllegalArgumentException(counter.nodeName() + " is not supported in for loop counters");
+    	}
+    	
+    	switch (end.nodeName()) {
+	    	case "BinOp":
+	    		switch(((BinOp)end).getOperator()) {
+	    			// TODO: distinguish the +/- 1
+		    		case "<":
+		    		case "<=":
+		    			// Expect to find loopVariable on one side. Evaluate the output complexity of the other side.
+		    			AstNode left = ((BinOp)end).getLeft();
+		    			AstNode right = ((BinOp)end).getRight();
+		    			AstNode eval = null;
+		    			if (left instanceof Lookup && ((Lookup) left).getName().equals(loopVariable)) {
+		    				eval = right;
+		    			} else if (right instanceof Lookup && ((Lookup) right).getName().equals(loopVariable)) {
+		    				eval = left;
+		    			} else {
+		    				throw new IllegalArgumentException("The loop variable " + loopVariable + " needs to be contained in the for loop end");
+		    			}
+		    			endComplexity = this.outputComplexity.visit(eval);
+			    		this.outputComplexity.recordVariable(((Assignment)counter).getName(), endComplexity);
+		    			break;
+	    			default:
+	    				throw new IllegalArgumentException(((BinOp)end).getOperator() + " is not a supported binary operator in for loop end");
+	    		}
+	    		break;
+    		default:
+    			throw new IllegalArgumentException(end.nodeName() + " is not supported in for loop ends");
+    		
+    	}
+    	
+    	switch (change.nodeName()) {
+	    	case "Assignment":
+	    		if (((Assignment)change).getName().equals(loopVariable)) {
+	    			switch(((Assignment)change).getValue().nodeName()) {
+			    		case "BinOp":
+			    			BinOp bop = (BinOp)((Assignment)change).getValue();
+			    			switch(bop.getOperator()) {
+					    		case "+":
+					    			// Expect to find loopVariable on one side. Check that the other side is the 1 literal.
+					    			AstNode left = bop.getLeft();
+					    			AstNode right = bop.getRight();
+					    			AstNode eval = null;
+					    			if (left instanceof Lookup && ((Lookup) left).getName().equals(loopVariable)) {
+					    				eval = right;
+					    			} else if (right instanceof Lookup && ((Lookup) right).getName().equals(loopVariable)) {
+					    				eval = left;
+					    			} else {
+					    				throw new IllegalArgumentException("The loop variable " + loopVariable + " needs to be contained in the for loop change");
+					    			}
+					    			boolean ok = eval.nodeName().equals("Literal") && ((Literal)eval).getText().equals("1");
+					    			if (!ok) {
+					    				throw new IllegalArgumentException("For loops must increment by 1");
+					    			}
+					    			break;
+				    			default:
+				    				throw new IllegalArgumentException(((BinOp)end).getOperator() + " is not a supported binary operator in for loop change");
+			    			}
+			    		break;
+		    			default:
+		    				throw new IllegalArgumentException(((Assignment)change).getValue() + " is not supported in for loop counters");
+		    		}
+	    		} else {
+	    			throw new IllegalArgumentException("The loop variable must be updated on each iteration");
+	    		}
+	    		break;
+    		default:
+    			throw new IllegalArgumentException(change.nodeName() + " is not supported in for loop ends");
+    	}
+    	List<AstNode> body = node.getBody();
+    	return new Sum(startComplexity, endComplexity, addAstNodes(body), new Variable(loopVariable));    	
     }
 
     @Override
