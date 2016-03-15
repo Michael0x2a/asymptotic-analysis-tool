@@ -13,8 +13,7 @@ public class OutputComplexityVisitor extends AstNodeVisitor<MathExpression> {
     // Maps java variables to math expressions representing their basic output complexities
     private Map<String, MathExpression> variables;
 
-    // invariant: assumptions.keySet() and outputComplexities.keySet() is disjoint
-    private final Supplier<String> genId;
+    private final Supplier<String> variableGenId;
 
     private static final String[] VARIABLE_NAMES = {
             "n", "m", "x", "y", "z", "r", "s",
@@ -25,18 +24,18 @@ public class OutputComplexityVisitor extends AstNodeVisitor<MathExpression> {
     public OutputComplexityVisitor() {
         this.assumptions = new HashMap<>();
         this.variables = new HashMap<>();
-        Queue<String> symbols = new LinkedList<>(Arrays.asList(VARIABLE_NAMES));
-        this.genId = symbols::remove;
+        Queue<String> variableSymbols = new LinkedList<>(Arrays.asList(VARIABLE_NAMES));
+        this.variableGenId = variableSymbols::remove;
     }
 
     public Variable recordAssumption(Lookup variable) {
-        Variable var = new Variable(this.genId.get());
+        Variable var = new Variable(this.variableGenId.get());
         this.assumptions.put(variable.getName(), var);
         return var;
     }
 
     public Variable recordAssumption(Parameter variable) {
-        Variable var = new Variable(this.genId.get());
+        Variable var = new Variable(this.variableGenId.get());
         this.assumptions.put(variable.getName(), var);
         return var;
     }
