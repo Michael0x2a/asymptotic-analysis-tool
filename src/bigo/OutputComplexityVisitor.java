@@ -155,7 +155,8 @@ public class OutputComplexityVisitor extends AstNodeVisitor<MathExpression> {
         try {
             return new Constant(Integer.parseInt(node.getText()));
         } catch (NumberFormatException e) {
-            throw new UnsupportedOperationException();
+            return new Constant(1);
+            //throw new UnsupportedOperationException();
         }
     }
 
