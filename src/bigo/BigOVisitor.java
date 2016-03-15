@@ -1,20 +1,11 @@
 package bigo;
 
+import math.*;
 import simplegrammar.*;
 
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import math.Addition;
-import math.Constant;
-import math.Division;
-import math.MathExpression;
-import math.Multiplication;
-import math.Subtraction;
-import math.Sum;
-import math.Variable;
-import math.Function;
 
 public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     private OutputComplexityVisitor outputComplexity;
@@ -50,7 +41,18 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
             this.methodSymbolVariables.put(method.getName(), new Variable(this.functionGenId.get()));
         }
         for (MethodDecl method : methods) {
-            this.methodRuntimeComplexities.put(method.getName(), this.visit(method));
+            MathExpression runtime = this.visit(method);
+            if (Utils.isRecursiveFunction(method)) {
+                runtime = new RecursiveCall(
+                        this.methodSymbolVariables.get(method.getName()),
+                        method.getParameters().stream()
+                                .map(this.outputComplexity::lookupAssumption)
+                                .collect(Collectors.toList()),
+                        runtime,
+                        new Constant(1));
+            }
+
+            this.methodRuntimeComplexities.put(method.getName(), runtime);
         }
         return this.methodRuntimeComplexities.get(methods.get(0).getName());
     }

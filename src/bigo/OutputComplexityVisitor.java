@@ -28,6 +28,14 @@ public class OutputComplexityVisitor extends AstNodeVisitor<MathExpression> {
         this.variableGenId = variableSymbols::remove;
     }
 
+    public Variable lookupAssumption(Lookup variable) {
+        return this.assumptions.get(variable.getName());
+    }
+
+    public Variable lookupAssumption(Parameter variable) {
+        return this.assumptions.get(variable.getName());
+    }
+
     public Variable recordAssumption(Lookup variable) {
         Variable var = new Variable(this.variableGenId.get());
         this.assumptions.put(variable.getName(), var);
