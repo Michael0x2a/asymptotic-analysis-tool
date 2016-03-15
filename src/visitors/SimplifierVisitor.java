@@ -504,22 +504,46 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
 
     @Override
     public AstNode visitPreIncrementExpression(Java8Parser.PreIncrementExpressionContext ctx) {
-        return new BinOp("+", this.visit(ctx.unaryExpression()), new Literal("1"));
+        AstNode expr = this.visit(ctx.unaryExpression());
+        if (expr instanceof Lookup) {
+            Lookup var = (Lookup) expr;
+            return new Assignment(var.getName(), new BinOp("+", var, new Literal("1")));
+        } else {
+            throw new IllegalStateException("Attempting to ++ a non-variable");
+        }
     }
 
     @Override
     public AstNode visitPreDecrementExpression(Java8Parser.PreDecrementExpressionContext ctx) {
-        return new BinOp("-", this.visit(ctx.unaryExpression()), new Literal("1"));
+        AstNode expr = this.visit(ctx.unaryExpression());
+        if (expr instanceof Lookup) {
+            Lookup var = (Lookup) expr;
+            return new Assignment(var.getName(), new BinOp("-", var, new Literal("1")));
+        } else {
+            throw new IllegalStateException("Attempting to -- a non-variable");
+        }
     }
 
     @Override
     public AstNode visitPostIncrementExpression(Java8Parser.PostIncrementExpressionContext ctx) {
-        return new BinOp("+", this.visit(ctx.postfixExpression()), new Literal("1"));
+        AstNode expr = this.visit(ctx.postfixExpression());
+        if (expr instanceof Lookup) {
+            Lookup var = (Lookup) expr;
+            return new Assignment(var.getName(), new BinOp("+", var, new Literal("1")));
+        } else {
+            throw new IllegalStateException("Attempting to ++ a non-variable");
+        }
     }
 
     @Override
     public AstNode visitPostDecrementExpression(Java8Parser.PostDecrementExpressionContext ctx) {
-        return new BinOp("-", this.visit(ctx.postfixExpression()), new Literal("1"));
+        AstNode expr = this.visit(ctx.postfixExpression());
+        if (expr instanceof Lookup) {
+            Lookup var = (Lookup) expr;
+            return new Assignment(var.getName(), new BinOp("-", var, new Literal("1")));
+        } else {
+            throw new IllegalStateException("Attempting to -- a non-variable");
+        }
     }
 
     @Override

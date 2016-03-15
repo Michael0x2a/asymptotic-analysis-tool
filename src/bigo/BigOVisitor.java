@@ -12,9 +12,12 @@ import math.Variable;
 
 public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     private OutputComplexityVisitor outputComplexity;
+    private Map<String, MathExpression> methodRuntimeComplexities;
 
     public BigOVisitor() {
         this.outputComplexity = new OutputComplexityVisitor();
+        this.methodRuntimeComplexities = new HashMap<>();
+        this.methodRuntimeComplexities.put("System.out.println", new Constant(1));
     }
 
     @Override
@@ -23,7 +26,10 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
         if (methods.isEmpty()) {
             throw new IllegalArgumentException("Class needs at least one method");
         }
-        return visit(methods.get(0));
+        for (MethodDecl method : methods) {
+            this.methodRuntimeComplexities.put(method.getName(), this.visit(method));
+        }
+        return this.methodRuntimeComplexities.get(methods.get(0).getName());
     }
 
     @Override
