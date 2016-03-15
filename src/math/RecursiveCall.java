@@ -45,14 +45,15 @@ public class RecursiveCall implements MathExpression {
         }
         StringJoiner zeroJoiner = new StringJoiner(", ", "(", ")");
         for (MathExpression expr : this.getParameters()) {
-            zeroJoiner.add("0");
+            zeroJoiner.add("1");
         }
 
 
-        return String.format("{0}{1} = {2}; {0}{3} = 1",
+        return String.format("%s%s = %s, %s%s = 1",
                 this.function.getName(),
                 paramJoiner.toString(),
                 this.recursiveCase.toEquation(),
+                this.function.getName(),
                 zeroJoiner.toString());
     }
 
