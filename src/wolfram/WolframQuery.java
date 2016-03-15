@@ -1,4 +1,19 @@
 package wolfram;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.Scanner;
+
 import com.wolfram.alpha.WAEngine;
 import com.wolfram.alpha.WAException;
 import com.wolfram.alpha.WAPlainText;
@@ -48,7 +63,7 @@ public class WolframQuery {
     	engine = new WAEngine();
     	engine.setAppID(appid);
         engine.addFormat("plaintext");
-        // engine.addFormat("mathml");
+        //engine.addFormat("mathml");
     }
     
     /**
@@ -71,13 +86,26 @@ public class WolframQuery {
             if (queryResult.isError() || !queryResult.isSuccess()) {
                 return null;
             } else {
+            	//System.out.println(queryResult.getXML());
                 // Got a result.
                 for (WAPod pod : queryResult.getPods()) {
-                    if (!pod.isError() && pod.getTitle().equals("Result")) {
+                    if (!pod.isError() && (pod.getTitle().equals("Result")
+                    		|| pod.getTitle().equals("Recurrence equation solution"))) {
                         for (WASubpod subpod : pod.getSubpods()) {
                             for (Object element : subpod.getContents()) {
                                 if (element instanceof WAPlainText) {
-                                    return (((WAPlainText) element).getText());
+                                    String response = (((WAPlainText) element).getText());
+                                    //return new String(response.getBytes("US-ASCII"));
+                                    //response = new String(response.getBytes("UTF-16"), "UTF-8");
+                                    String output = "";
+                                    for (int i = 0; i < response.length(); i++) {
+                                    		if (response.charAt(i) < 256)
+                                    			output += response.charAt(i);
+                                    		else
+                                    			output += '=';
+                                    }
+                                    return output;
+                                    
                                    }
                             }
                         }
@@ -93,8 +121,36 @@ public class WolframQuery {
     }
     
     public static void main(String[] args) {
-    	WolframQuery wq = new WolframQuery();
-    	System.out.println(wq.getWolframPlaintext("2+3+4n+2n+10n+4n^2"));
+    	System.out.println(getWolframResponse("2+3+4n+2n+10n+4n^2"));
+    	//System.out.println(getWolframResponse("T(n) = T(n/2) + T(n/2) + 20, T(1) = 1"));
+    }
+    
+    public static String getWolframResponse(String input) {
+//    	String urlinput = "http://api.wolframalpha.com/v2/query?appid=393YL5-7PAYX696YV&input="
+//    			+ input + "&format=plaintext";
+    	try {
+			URL url = new URI("http", "api.wolframalpha.com", "/v2/query", 
+					"appid=393YL5-7PAYX696YV&input=" + input + "&format=plaintext",
+					null).toURL();
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			Scanner s = new Scanner(conn.getInputStream(), "UTF-8");
+			s.useDelimiter("\\A");
+			String result = s.hasNext() ? s.next() : "";
+			s.close();
+			return result;
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return null;
     }
 
 }

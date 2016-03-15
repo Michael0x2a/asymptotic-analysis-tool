@@ -15,6 +15,7 @@ import grammar.Java8Parser;
 import math.MathExpression;
 import simplegrammar.*;
 import visitors.SimplifierVisitor;
+import wolfram.WolframQuery;
 
 public class InsertionSort {
 
@@ -23,7 +24,10 @@ public class InsertionSort {
 		System.out.println(new SimpleGrammarPrettyPrint().visit(get()));
 		MathExpression rawEq = b.visit(get());
 		System.out.println(rawEq.toEquation());
-        System.out.println(new EquationSimplifier().visit(rawEq).toEquation());
+		String simplified = new EquationSimplifier().visit(rawEq).toEquation();
+        System.out.println(simplified);
+        WolframQuery wq = new WolframQuery();
+        System.out.println(wq.getWolframPlaintext(simplified));
 
         System.out.println("MAPS-------");
         System.out.println("ASSUMPTIONS: " + b.getAssumptions());
