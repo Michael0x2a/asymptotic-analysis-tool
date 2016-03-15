@@ -1,6 +1,7 @@
 package main;
 
 import bigo.BigOVisitor;
+import bigo.EquationDisplayPrinter;
 import bigo.EquationSimplifier;
 import bigo.SimpleGrammarPrettyPrint;
 import math.MathExpression;
@@ -95,6 +96,7 @@ public class Main {
         String simplifiedAst = null;
         String rawEquation = null;
         String simplifiedEquation = null;
+        String underlyingEquation = null;
         Map<String, String> assumptions = new HashMap<>();
         String error = null;
 
@@ -116,11 +118,12 @@ public class Main {
             // Generate raw equation
             BigOVisitor b = new BigOVisitor();
             MathExpression rawEq = b.visit(simpleAst);
-            rawEquation = rawEq.toEquation();
+            rawEquation = new EquationDisplayPrinter().visit(rawEq);
 
             // Generate simplified equation
             MathExpression simpleEq = new EquationSimplifier().visit(rawEq);
-            simplifiedEquation = simpleEq.toEquation();
+            underlyingEquation = simpleEq.toEquation();
+            simplifiedEquation = new EquationDisplayPrinter().visit(simpleEq);
 
             // Grab assumptions
             assumptions = b.getAssumptions().entrySet().stream()
@@ -135,6 +138,7 @@ public class Main {
                 simplifiedAst,
                 rawEquation,
                 simplifiedEquation,
+                underlyingEquation,
                 null,
                 assumptions,
                 error);
@@ -150,6 +154,7 @@ public class Main {
                     result.getSimplifiedAst(),
                     result.getRawEquation(),
                     result.getSimplifiedEquation(),
+                    result.getUnderlyingEquation(),
                     eq.getFinalEquation(),
                     result.getAssumptions(),
                     eq.getError());

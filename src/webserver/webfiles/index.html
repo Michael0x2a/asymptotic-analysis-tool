@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test</title>
+    <title>Runtime complexity tool</title>
 
     <link rel="stylesheet" href="bootstrap.min.css" >
     <script src="jquery.js"></script>
@@ -10,6 +10,74 @@
     <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
 
     <style>
+        .loader {
+            font-size: 20px;
+            text-indent: -9999em;
+            overflow: hidden;
+            width: 1em;
+            height: 1em;
+            border-radius: 50%;
+            position: relative;
+            -webkit-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-animation: load6 1.7s infinite ease;
+            animation: load6 1.7s infinite ease;
+            float:left;
+            margin-left: 1.5em;
+        }
+        @-webkit-keyframes load6 {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+                box-shadow: 0 -0.83em 0 -0.4em #000000, 0 -0.83em 0 -0.42em #000000, 0 -0.83em 0 -0.44em #000000, 0 -0.83em 0 -0.46em #000000, 0 -0.83em 0 -0.477em #000000;
+            }
+            5%,
+            95% {
+                box-shadow: 0 -0.83em 0 -0.4em #000000, 0 -0.83em 0 -0.42em #000000, 0 -0.83em 0 -0.44em #000000, 0 -0.83em 0 -0.46em #000000, 0 -0.83em 0 -0.477em #000000;
+            }
+            10%,
+            59% {
+                box-shadow: 0 -0.83em 0 -0.4em #000000, -0.087em -0.825em 0 -0.42em #000000, -0.173em -0.812em 0 -0.44em #000000, -0.256em -0.789em 0 -0.46em #000000, -0.297em -0.775em 0 -0.477em #000000;
+            }
+            20% {
+                box-shadow: 0 -0.83em 0 -0.4em #000000, -0.338em -0.758em 0 -0.42em #000000, -0.555em -0.617em 0 -0.44em #000000, -0.671em -0.488em 0 -0.46em #000000, -0.749em -0.34em 0 -0.477em #000000;
+            }
+            38% {
+                box-shadow: 0 -0.83em 0 -0.4em #000000, -0.377em -0.74em 0 -0.42em #000000, -0.645em -0.522em 0 -0.44em #000000, -0.775em -0.297em 0 -0.46em #000000, -0.82em -0.09em 0 -0.477em #000000;
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+                box-shadow: 0 -0.83em 0 -0.4em #000000, 0 -0.83em 0 -0.42em #000000, 0 -0.83em 0 -0.44em #000000, 0 -0.83em 0 -0.46em #000000, 0 -0.83em 0 -0.477em #000000;
+            }
+        }
+        @keyframes load6 {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+                box-shadow: 0 -0.83em 0 -0.4em #000000, 0 -0.83em 0 -0.42em #000000, 0 -0.83em 0 -0.44em #000000, 0 -0.83em 0 -0.46em #000000, 0 -0.83em 0 -0.477em #000000;
+            }
+            5%,
+            95% {
+                box-shadow: 0 -0.83em 0 -0.4em #000000, 0 -0.83em 0 -0.42em #000000, 0 -0.83em 0 -0.44em #000000, 0 -0.83em 0 -0.46em #000000, 0 -0.83em 0 -0.477em #000000;
+            }
+            10%,
+            59% {
+                box-shadow: 0 -0.83em 0 -0.4em #000000, -0.087em -0.825em 0 -0.42em #000000, -0.173em -0.812em 0 -0.44em #000000, -0.256em -0.789em 0 -0.46em #000000, -0.297em -0.775em 0 -0.477em #000000;
+            }
+            20% {
+                box-shadow: 0 -0.83em 0 -0.4em #000000, -0.338em -0.758em 0 -0.42em #000000, -0.555em -0.617em 0 -0.44em #000000, -0.671em -0.488em 0 -0.46em #000000, -0.749em -0.34em 0 -0.477em #000000;
+            }
+            38% {
+                box-shadow: 0 -0.83em 0 -0.4em #000000, -0.377em -0.74em 0 -0.42em #000000, -0.645em -0.522em 0 -0.44em #000000, -0.775em -0.297em 0 -0.46em #000000, -0.82em -0.09em 0 -0.477em #000000;
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+                box-shadow: 0 -0.83em 0 -0.4em #000000, 0 -0.83em 0 -0.42em #000000, 0 -0.83em 0 -0.44em #000000, 0 -0.83em 0 -0.46em #000000, 0 -0.83em 0 -0.477em #000000;
+            }
+        }
         h1 {
             font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
             font-size: 24px;
@@ -63,8 +131,17 @@
             display: none;
         }
 
+        #analyze-button {
+            float: left;
+        }
+
         .equation-hidden {
             display:none;
+        }
+
+        .clearfix {
+            overflow: auto;
+            zoom: 1;
         }
     </style>
 
@@ -94,6 +171,8 @@
             }
 
             function analyze() {
+                $(".loader").css({"display": "block"});
+
                 var javaCode = $("#code-input").html();
                 post("/parse/partial", javaCode, function(data) {
                     $("#analysis-section").css({"display": "block"});
@@ -103,9 +182,10 @@
                     $("#simplified-equation").html("`" + data.simplifiedEquation + "`");
                     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
-                    post("/parse/equation", data.simplifiedEquation, function(data) {
+                    post("/parse/equation", data.underlyingEquation, function(data) {
                         $("#final-equation").html("`" + data.finalEquation + "`");
                         MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+                        $(".loader").css({"display": "none"});
                     })
                 });
             }
@@ -117,6 +197,8 @@
 
             $("#analyze-button").click(analyze);
 
+            load("ArraySum");
+            $(".loader").css({"display": "none"});
         });
     </script>
 </head>
@@ -144,7 +226,12 @@
         <h2>Type code here:</h2>
         <textarea id="code-input"></textarea>
 
-        <button id="analyze-button" class="btn btn-success btn-large">Analyze</button>
+        <div class="clearfix">
+            <button id="analyze-button" class="btn btn-success btn-large">Analyze</button>
+
+            <div class="loader">Loading</div>
+        </div>
+
 
         <div id="analysis-section">
             <h2>Java AST:</h2>
@@ -155,6 +242,7 @@
                href="#java-ast-container">
                 Toggle
             </a>
+
 
             <div class="collapse" id="java-ast-container">
                 <pre id="java-ast"></pre>

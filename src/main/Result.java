@@ -7,6 +7,7 @@ public class Result {
     private String simplifiedAst;
     private String rawEquation;
     private String simplifiedEquation;
+    private String underlyingEquation;
     private String finalEquation;
     private Map<String, String> assumptions;
     private String error;
@@ -15,6 +16,7 @@ public class Result {
                   String simplifedAst,
                   String rawEquation,
                   String simplifiedEquation,
+                  String underlyingEquation,
                   String finalEquation,
                   Map<String, String> assumptions,
                   String error) {
@@ -22,6 +24,7 @@ public class Result {
         this.simplifiedAst = simplifedAst;
         this.rawEquation = rawEquation;
         this.simplifiedEquation = simplifiedEquation;
+        this.underlyingEquation = underlyingEquation;
         this.finalEquation = finalEquation;
         this.error = error;
         this.assumptions = assumptions;
@@ -41,6 +44,10 @@ public class Result {
 
     public String getSimplifiedEquation() {
         return simplifiedEquation;
+    }
+
+    public String getUnderlyingEquation() {
+        return underlyingEquation;
     }
 
     public String getFinalEquation() {
