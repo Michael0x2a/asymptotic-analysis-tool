@@ -142,13 +142,18 @@
         .clearfix {
             overflow: auto;
             zoom: 1;
+            margin-bottom: 1em;
+        }
+
+        #error-section {
+            display: none;
         }
     </style>
 
     <script type="text/javascript">
         $(document).ready(function() {
             function fill(areaId, areaContents) {
-                $(areaId).html(areaContents);
+                $(areaId).val(areaContents);
             }
 
             function post(url, text, callback) {
@@ -172,6 +177,8 @@
 
             function analyze() {
                 $(".loader").css({"display": "block"});
+                $("#error-section").css({"display": "none"});
+                $("#error-section pre").html("");
 
                 $("#java-ast").html("");
                 $("#simplified-ast").html("");
@@ -179,8 +186,16 @@
                 $("#simplified-equation").html("");
                 $("#final-equation").html("");
 
-                var javaCode = $("#code-input").html();
+                var javaCode = $("#code-input").val();
                 post("/parse/partial", javaCode, function(data) {
+                    console.log(data);
+                    if (data.error != null) {
+                        $("#error-section").css({"display": "block"});
+                        $("#error-section pre").html(data.error);
+                        $(".loader").css({"display": "none"});
+                        return;
+                    }
+
                     $("#analysis-section").css({"display": "block"});
                     $("#java-ast").html(data.antlrAst);
                     $("#simplified-ast").html(data.simplifiedAst);
@@ -189,6 +204,13 @@
                     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
                     post("/parse/equation", data.underlyingEquation, function(data) {
+                        console.log(data);
+                        if (data.error != null) {
+                            $("#error-section").css({"display": "block"});
+                            $("#error-section pre").html(data.error);
+                            $(".loader").css({"display": "none"});
+                            return;
+                        }
                         $("#final-equation").html("`" + data.finalEquation + "`");
                         MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
                         $(".loader").css({"display": "none"});
@@ -262,6 +284,7 @@
             <div class="loader">Loading</div>
         </div>
 
+        <div id="error-section" class="alert alert-danger"><pre></pre></div>
 
         <div id="analysis-section">
             <h2>Java AST:</h2>
