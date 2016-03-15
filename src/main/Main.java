@@ -84,6 +84,8 @@ public class Main {
             WolframQuery wolf = new WolframQuery();
             String solved = wolf.getWolframPlaintext(simplifiedEquation);
             finalEquation = solved == null ? simplifiedEquation : solved;
+            finalEquation = finalEquation.replace(" ", "\\cdot ");
+            System.out.println("Final: " + finalEquation);
         } catch (Exception e) {
             error = e.getMessage();
             e.printStackTrace();
@@ -119,11 +121,14 @@ public class Main {
             BigOVisitor b = new BigOVisitor();
             MathExpression rawEq = b.visit(simpleAst);
             rawEquation = new EquationDisplayPrinter().visit(rawEq);
+            System.out.println("Raw: " + rawEq);
 
             // Generate simplified equation
             MathExpression simpleEq = new EquationSimplifier().visit(rawEq);
             underlyingEquation = simpleEq.toEquation();
             simplifiedEquation = new EquationDisplayPrinter().visit(simpleEq);
+            System.out.println("Underlying: " + underlyingEquation);
+            System.out.println("Simplified: " + simplifiedEquation);
 
             // Grab assumptions
             assumptions = b.getAssumptions().entrySet().stream()

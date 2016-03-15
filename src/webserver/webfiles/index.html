@@ -173,6 +173,12 @@
             function analyze() {
                 $(".loader").css({"display": "block"});
 
+                $("#java-ast").html("");
+                $("#simplified-ast").html("");
+                $("#raw-equation").html("");
+                $("#simplified-equation").html("");
+                $("#final-equation").html("");
+
                 var javaCode = $("#code-input").html();
                 post("/parse/partial", javaCode, function(data) {
                     $("#analysis-section").css({"display": "block"});
@@ -194,10 +200,16 @@
             $("#insertionsort").click(load("InsertionSort"));
             $("#selectionsort").click(load("SelectionSort"));
             $("#mergesort").click(load("MergeSort"));
+            $("#powerset").click(load("PowerSet"));
+            $("#orderofmagnitude").click(load("OrderMagnitude"));
+            $("#nestedfor").click(load("NestedFor"));
+            $("#constant").click(load("Constant"));
+            $("#fibonacci").click(load("Fibonacci"));
+            $("#hello").click(load("Hello"));
 
             $("#analyze-button").click(analyze);
 
-            load("ArraySum");
+            load("ArraySum")();
             $(".loader").css({"display": "none"});
         });
     </script>
@@ -221,6 +233,24 @@
             <button id="mergesort"
                     type="button"
                     class="btn btn-default">MergeSort</button>
+            <button id="powerset"
+                    type="button"
+                    class="btn btn-default">PowerSet</button>
+            <button id="orderofmagnitude"
+                    type="button"
+                    class="btn btn-default">OrderOfMagnitude</button>
+            <button id="nestedfor"
+                    type="button"
+                    class="btn btn-default">NestedFor</button>
+            <button id="constant"
+                    type="button"
+                    class="btn btn-default">Constant</button>
+            <button id="fibonacci"
+                    type="button"
+                    class="btn btn-default">Fibonacci</button>
+            <button id="hello"
+                    type="button"
+                    class="btn btn-default">Hello</button>
         </div>
 
         <h2>Type code here:</h2>

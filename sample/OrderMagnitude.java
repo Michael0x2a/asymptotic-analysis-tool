@@ -1,4 +1,3 @@
-
 public class OrderMagnitude {
 	// Find the order of magnitude of a number
 	public int orderMagnitude(int n) {
