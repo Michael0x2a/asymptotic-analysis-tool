@@ -1,7 +1,6 @@
 public class MergeSort {
     public void mergeSort(int[] arr) {
         if (arr.length < 2) return;
-        // Wasteful allocations, but shouldn�t affect asymptotic runtime
         int[] half1 = new int[arr.length / 2];
         int[] half2 = new int[arr.length - half1.length];
         int i = 0;
