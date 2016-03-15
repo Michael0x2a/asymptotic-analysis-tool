@@ -24,4 +24,9 @@ public class Variable implements MathExpression {
     public <T> T accept(MathExpressionVisitor<T> visitor) {
         return visitor.visitVariable(this);
     }
+    
+    @Override
+    public String toString() {
+    	return name;
+    }
 }

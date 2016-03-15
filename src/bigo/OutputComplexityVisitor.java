@@ -200,5 +200,13 @@ public class OutputComplexityVisitor extends AstNodeVisitor<MathExpression> {
     public MathExpression visitMultipleAstNodes(MultipleAstNodes node) {
         throw new UnsupportedOperationException();
     }
+    
+    public Map<String, Variable> getAssumptions() {
+    	return assumptions;
+    }
+    
+    public Map<String, MathExpression> getVariables() {
+    	return variables;
+    }
 
 }
