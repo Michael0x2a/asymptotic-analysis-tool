@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import bigo.BigOVisitor;
+import bigo.SimpleGrammarPrettyPrint;
 import grammar.Java8Lexer;
 import grammar.Java8Parser;
 import simplegrammar.*;
@@ -19,8 +20,8 @@ import visitors.SimplifierVisitor;
 public class ArraySumSimple {
 
 	public static void main(String[] args) throws IOException {
-		//System.out.println(new SimpleGrammarPrettyPrint().visit(get()));
-		System.out.println(new BigOVisitor().visit(get()).toEquation());
+		System.out.println(new SimpleGrammarPrettyPrint().visit(get()));
+		//System.out.println(new BigOVisitor().visit(get()).toEquation());
 	}
 
 	public static AstNode get() throws IOException {
