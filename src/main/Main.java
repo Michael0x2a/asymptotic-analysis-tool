@@ -202,47 +202,4 @@ public class Main {
             e.printStackTrace();   // so we can get stack trace
         }
     }
-
-    public class QuickSort {
-        public void sort(int[] inputArr) {
-            int length = inputArr.length;
-            quickSort(inputArr, 0, length - 1);
-        }
-
-        private void quickSort(int[] array, int lowerIndex, int higherIndex) {
-            int i = lowerIndex;
-            int j = higherIndex;
-            // calculate pivot number, I am taking pivot as middle index number
-            int pivot = array[lowerIndex+(higherIndex-lowerIndex)/2];
-            // Divide into two arrays
-            for (int k = 0; i < array.length; k++) {
-                if (k <= j) {
-                    for (int x = 0; j < pivot; x++) {
-                        if (array[i] < pivot) {
-                            i += 1;
-                        }
-                    }
-                    for (int y = 0; k < pivot; y++) {
-                        if (array[j] > pivot) {
-                            j -= 1;
-                        }
-                    }
-                    if (i <= j) {
-                        int temp = array[i];
-                        array[i] = array[j];
-                        array[j] = temp;
-                        //move index to next position on both sides
-                        i += 1;
-                        j -= 1;
-                    }
-
-                }
-            }
-            // call quickSort() method recursively
-            if (lowerIndex < j)
-                quickSort(array, lowerIndex, j);
-            if (i < higherIndex)
-                quickSort(array, i, higherIndex);
-        }
-    }
 }

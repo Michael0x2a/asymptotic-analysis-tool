@@ -1,42 +1,51 @@
 public class QuickSort {
-    public void sort(int[] inputArr) {
-        int length = inputArr.length;
-        quickSort(inputArr, 0, length - 1);
-    }
-
-    private void quickSort(int[] array, int lowerIndex, int higherIndex) {
-        int i = lowerIndex;
-        int j = higherIndex;
-        // calculate pivot number, I am taking pivot as middle index number
-        int pivot = array[lowerIndex+(higherIndex-lowerIndex)/2];
-        // Divide into two arrays
-        for (int k = 0; k < array.length; k++) {
-            if (k <= j) {
-                for (int x = i; x < pivot; x++) {
-                    if (array[x] < pivot) {
-                        i += 1;
-                    }
-                }
-                for (int y = j; y < pivot; y++) {
-                    if (array[pivot - y] > pivot) {
-                        j -= 1;
-                    }
-                }
-                if (i <= j) {
-                    int temp = array[i];
-                    array[i] = array[j];
-                    array[j] = temp;
-                    //move index to next position on both sides
-                    i += 1;
-                    j -= 1;
-                }
-
-            }
+	// BROKEN: do not use
+    public void sort(int[] array) {
+    	if (array.length < 2) return;
+    	int pivot = array[0];
+    	// Count how many elements are in each partition
+    	int numLess = 0;
+    	int numGreater = 0;
+    	
+        for (int i = 0; i < array.length; i++) {
+        	if (array[i] < pivot) {
+        		numLess = numLess + 1;
+        	} else if (array[i] > pivot) {
+        		numGreater = numGreater + 1;
+        	}
         }
-        // call quickSort() method recursively
-        if (lowerIndex < j)
-            quickSort(array, lowerIndex, j);
-        if (i < higherIndex)
-            quickSort(array, i, higherIndex);
+        
+        int[] half1 = new int[numLess];
+        int[] half2 = new int[numGreater];
+        int i = 0;
+        int j = 0;
+        
+        for (int k = 0; k < array.length; k++) {
+        	if (array[k] < pivot) {
+        		half1[i] = array[k];
+        		i = i + 1;
+        	} else if (array[k] > pivot) {
+        		half2[j] = array[k];
+        		j = j + 1;
+        	}
+        }
+        
+        sort(half1);
+        sort(half2);
+        merge(array, half1, pivot, half2);
+        
     }
+
+    private void merge(int[] output, int[] half1, int pivot, int[] half2) {
+	    int i = 0;
+	    for (int k = 0; k < half1.length; k++) {
+	    	output[i] = half1[k];
+	    	i = i + 1;
+	    }
+	    output[i] = pivot;
+	    for (int k = 0; k < half2.length; k++) {
+	    	output[i] = half2[k];
+	    	i = i + 1;
+	    }
+	}
 }
