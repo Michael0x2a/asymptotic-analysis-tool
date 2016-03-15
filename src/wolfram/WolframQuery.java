@@ -90,7 +90,8 @@ public class WolframQuery {
                 // Got a result.
                 for (WAPod pod : queryResult.getPods()) {
                     if (!pod.isError() && (pod.getTitle().equals("Result")
-                    		|| pod.getTitle().equals("Recurrence equation solution"))) {
+                    		|| pod.getTitle().equals("Recurrence equation solution")
+                            || pod.getTitle().equals("Expanded form"))) {
                         for (WASubpod subpod : pod.getSubpods()) {
                             for (Object element : subpod.getContents()) {
                                 if (element instanceof WAPlainText) {
