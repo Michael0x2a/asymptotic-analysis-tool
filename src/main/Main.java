@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import grammar.*;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import simplegrammar.AstNode;
 import visitors.PrettyPrintVisitor;
 import visitors.SimplifierVisitor;
@@ -134,7 +135,8 @@ public class Main {
             assumptions = b.getAssumptions().entrySet().stream()
                     .collect(Collectors.toMap(Map.Entry::getKey, pair -> pair.getValue().getName()));
         } catch (Exception e) {
-            error = e.getMessage();
+            System.err.println("Hit error");
+            error = ExceptionUtils.getStackTrace(e);
             e.printStackTrace();
         }
 
