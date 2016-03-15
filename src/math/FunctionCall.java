@@ -42,7 +42,7 @@ public class FunctionCall implements MathExpression {
 
     @Override
     public String nodeName() {
-        return "RecursiveCall";
+        return "FunctionCall";
     }
 
     @Override

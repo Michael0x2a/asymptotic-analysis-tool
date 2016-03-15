@@ -47,7 +47,8 @@ public class EquationSimplifier implements MathExpressionVisitor<MathExpression>
     }
 
     private List<MathExpression> mergeConstantIfAble(List<MathExpression> exprs, Optional<Constant> constant) {
-        if (constant.isPresent()) {
+        System.out.println(exprs);
+        if ((exprs.size() == 0 || (exprs.size() == 1 && exprs.get(0).nodeName().equals("Function"))) && constant.isPresent()) {
             exprs.add(constant.get());
         }
         return exprs;

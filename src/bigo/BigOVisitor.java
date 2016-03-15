@@ -90,7 +90,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitLookup(Lookup node) {
-        return new Constant(2);
+        return new Constant(1);
     }
 
     @Override
@@ -267,7 +267,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitLiteral(Literal node) {
-        return new Constant(4);
+        return new Constant(1);
     }
 
     @Override

@@ -1,6 +1,6 @@
 public class Hello {
-	public static void foo() {
-		System.out.println("hello world!");
-	}
+    public static void foo() {
+        System.out.println("hello world!");
+    }
 }
 
