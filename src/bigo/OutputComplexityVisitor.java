@@ -134,6 +134,7 @@ public class OutputComplexityVisitor extends AstNodeVisitor<MathExpression> {
             case "+": return new Addition(list);
             case "-": return new Subtraction(list);
             case "*": return new Multiplication(list);
+            case "/": return new Division(list);
         }
 
         throw new UnsupportedOperationException("The " + node.getOperator() + " symbol is currently not supported");
