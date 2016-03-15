@@ -36,16 +36,14 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
                 .normalClassDeclaration();
 
         String className = cls.getChild(2).getText();
-        Java8Parser.MethodDeclarationContext method = cls
-                .classBody()
-                .classBodyDeclaration()
-                .get(0)
-                .classMemberDeclaration()
-                .methodDeclaration();
 
-        // TODO: Modify to handle multiple methods
         List<MethodDecl> methods = new ArrayList<>();
-        methods.add((MethodDecl) this.visit(method));
+        for (Java8Parser.ClassBodyDeclarationContext item : cls.classBody().classBodyDeclaration()) {
+            if (item.classMemberDeclaration().methodDeclaration() != null) {
+                methods.add((MethodDecl) this.visit(item.classMemberDeclaration().methodDeclaration()));
+            }
+        }
+
         return new ClassDecl(className, methods);
     }
 
@@ -62,13 +60,15 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
         Java8Parser.MethodBodyContext bodyCtx = ctx.methodBody();
 
         List<Parameter> parameters = new ArrayList<>();
-        if (paramsCtx.formalParameters() != null) {
-            // Jump by two to skip commas
-            for (int i = 0; i < paramsCtx.formalParameters().children.size(); i += 2) {
-                parameters.add((Parameter) this.visit(paramsCtx.formalParameters().getChild(i)));
+        if (paramsCtx != null) {
+            if (paramsCtx.formalParameters() != null) {
+                // Jump by two to skip commas
+                for (int i = 0; i < paramsCtx.formalParameters().children.size(); i += 2) {
+                    parameters.add((Parameter) this.visit(paramsCtx.formalParameters().getChild(i)));
+                }
             }
+            parameters.add((Parameter) this.visit(paramsCtx.lastFormalParameter().formalParameter()));
         }
-        parameters.add((Parameter) this.visit(paramsCtx.lastFormalParameter().formalParameter()));
 
         return new MethodDecl(returnType, methodName, parameters, expand(this.visit(bodyCtx.block())));
     }
@@ -504,22 +504,22 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
 
     @Override
     public AstNode visitPreIncrementExpression(Java8Parser.PreIncrementExpressionContext ctx) {
-        return new UnaryOp("++", this.visit(ctx.unaryExpression()));
+        return new BinOp("+", this.visit(ctx.unaryExpression()), new Literal("1"));
     }
 
     @Override
     public AstNode visitPreDecrementExpression(Java8Parser.PreDecrementExpressionContext ctx) {
-        return new UnaryOp("--", this.visit(ctx.unaryExpression()));
+        return new BinOp("-", this.visit(ctx.unaryExpression()), new Literal("1"));
     }
 
     @Override
     public AstNode visitPostIncrementExpression(Java8Parser.PostIncrementExpressionContext ctx) {
-        return new UnaryOp("++", this.visit(ctx.postfixExpression()));
+        return new BinOp("+", this.visit(ctx.postfixExpression()), new Literal("1"));
     }
 
     @Override
     public AstNode visitPostDecrementExpression(Java8Parser.PostDecrementExpressionContext ctx) {
-        return new UnaryOp("--", this.visit(ctx.postfixExpression()));
+        return new BinOp("-", this.visit(ctx.postfixExpression()), new Literal("1"));
     }
 
     @Override
