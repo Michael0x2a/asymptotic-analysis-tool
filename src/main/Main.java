@@ -1,6 +1,8 @@
 package main;
 
+import bigo.BigOVisitor;
 import bigo.SimpleGrammarPrettyPrint;
+import math.MathExpression;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import grammar.*;
+import simplegrammar.AstNode;
 import visitors.PrettyPrintVisitor;
 import visitors.SimplifierVisitor;
 
@@ -74,22 +77,27 @@ public class Main {
     public static void parseFile(String f) {
         try {
             System.err.println(f);
-            // Create a scanner that reads from the input stream passed to us
+
+            // Setup
             Lexer lexer = new Java8Lexer(new ANTLRFileStream(f));
-
             CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-            // Create a parser that reads from the scanner
             Java8Parser parser = new Java8Parser(tokens);
 
-            // start parsing at the compilationUnit rule
+            // Parse
             ParserRuleContext t = parser.compilationUnit();
             System.out.println(parser.getRuleNames()[t.getRuleIndex()]);
 
+            // Generate ANTLR AST
             System.out.println(t.toStringTree(parser));
-
             System.out.println(new PrettyPrintVisitor(parser).visit(t));
-            System.out.println(new SimpleGrammarPrettyPrint().visit(new SimplifierVisitor(parser).visit(t)));
+
+            // Generate Simple AST
+            AstNode simpleAst = new SimplifierVisitor(parser).visit(t);
+            System.out.println(new SimpleGrammarPrettyPrint().visit(simpleAst));
+
+            // Generate raw equation
+            MathExpression rawEq = new BigOVisitor().visit(simpleAst);
+            System.out.println(rawEq.toEquation());
         } catch (Exception e) {
             System.err.println("parser exception: " + e);
             e.printStackTrace();   // so we can get stack trace

@@ -1,6 +1,6 @@
 package math;
 
 public interface MathExpression {
-	String nodeName();
-	String toEquation();
+    String nodeName();
+    String toEquation();
 }

@@ -1,22 +1,25 @@
 package math;
 
 public class Log implements MathExpression {
+    private MathExpression expression;
 
-	private MathExpression expression;
-	
-	public Log(MathExpression e) {
-		expression = e;
-	}
-	
-	@Override
-	public String nodeName() {
-		// TODO Auto-generated method stub
-		return "log";
-	}
+    public Log(MathExpression expression) {
+        this.expression = expression;
+    }
 
-	@Override
-	public String toEquation() {
-		return "log(" + expression + ")";
-	}
+    public MathExpression getExpression() {
+        return this.expression;
+    }
+
+
+    @Override
+    public String nodeName() {
+        return "Log";
+    }
+
+    @Override
+    public String toEquation() {
+        return "log(" + expression.toEquation() + ")";
+    }
 
 }

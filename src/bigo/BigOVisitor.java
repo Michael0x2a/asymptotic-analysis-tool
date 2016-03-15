@@ -2,12 +2,7 @@ package bigo;
 
 import simplegrammar.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 import math.Addition;
 import math.Constant;
@@ -16,46 +11,30 @@ import math.Multiplication;
 import math.Variable;
 
 public class BigOVisitor extends AstNodeVisitor<MathExpression> {
+    private OutputComplexityVisitor outputComplexity;
 
-	// Maps java variables to abstract symbols
-	private Map<String, Variable> assumptions;
-	
-	// Maps java variables to math expressions representing their basic output complexities
-	private Map<String, MathExpression> outputComplexities;
-	
-	// invariant: assumptions.keySet() and outputComplexities.keySet() is disjoint
-	
-	// Represents the remaining abstract symbols we can declare
-	private Queue<Variable> symbols;
-	
-	public BigOVisitor() {
-		assumptions = new HashMap<>();
-		outputComplexities = new HashMap<>();
-		String[] variables = {"n", "m", "x", "y", "z", "r", "s", "t", "u", "v", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "p", "q", "w"};
-		symbols = new LinkedList<>();
-		for (String s : variables)
-			symbols.add(new Variable(s));
-	}
-	
+    public BigOVisitor() {
+        this.outputComplexity = new OutputComplexityVisitor();
+    }
+
     @Override
     public MathExpression visitClassDecl(ClassDecl node) {
-    	List<MethodDecl> methods = node.getMethods();
-    	if (methods.isEmpty()) {
-    		throw new IllegalArgumentException("Class needs at least one method");
-    	}
+        List<MethodDecl> methods = node.getMethods();
+        if (methods.isEmpty()) {
+            throw new IllegalArgumentException("Class needs at least one method");
+        }
         return visit(methods.get(0));
     }
 
     @Override
     public MathExpression visitMethodDecl(MethodDecl node) {
-    	// Add parameters to our assumptions
-    	for (Parameter p : node.getParameters()) {
-    		addToAssumptionsTable(p.getName());
-    	}
-    	
-    	// Visit body
-    	return new Addition(addAstNodes(node.getBody()));
-        
+        // Add parameters to our assumptions
+        for (Parameter p : node.getParameters()) {
+            this.outputComplexity.recordAssumption(p);
+        }
+
+        // Visit body
+        return new Addition(addAstNodes(node.getBody()));
     }
 
     @Override
@@ -70,14 +49,8 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitAssignment(Assignment node) {
-    	// Calculate this node's value by visiting it.
-    	// Then, put it in the output complexities map, overwriting if necessary,
-    	// and remove it from the assumptions map if present.
-    	String variableName = node.getName();
-    	MathExpression value = visit(node.getValue());
-    	outputComplexities.put(variableName, value);
-    	assumptions.remove(variableName);
-    	return value;
+        this.outputComplexity.recordVariable(node);
+        return this.visit(node.getValue());
     }
 
     @Override
@@ -87,76 +60,63 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitForEachLoop(ForEachLoop node) {
-    	AstNode sequence = node.getSequence();
-    	List<AstNode> bodyStatements = node.getBody();
-    	switch(sequence.nodeName()) {
-    		case "Lookup":
-    			Lookup lookupNode = (Lookup)sequence;
-    			String name = lookupNode.getName();
-    			if (!assumptions.containsKey(name) && !outputComplexities.containsKey(name)) {
-    				// We haven't seen this lookup yet, so cop out and introduce it.
-    				addToAssumptionsTable(name);
-    			}
+        MathExpression bodyRuntime = this.addAstNodes(node.getBody());
+        MathExpression outerRuntime;
 
-    			// Now we can generate the multiplication
-				List<MathExpression> total = new ArrayList<>();
-				total.add(addAstNodes(bodyStatements));
-				total.add(assumptions.containsKey(name)
-						? assumptions.get(name) 
-						: outputComplexities.get(name));
-				return new Multiplication(total);
-    		default:
-    			throw new UnsupportedOperationException("what's " + node.nodeName() + "?");
-    	}
+        AstNode sequence = node.getSequence();
+        switch(sequence.nodeName()) {
+            case "Lookup":
+                outerRuntime = this.outputComplexity.lookupExpression((Lookup) sequence);
+                break;
+            default:
+                throw new UnsupportedOperationException("what's " + node.nodeName() + "?");
+        }
+
+        return new Multiplication(Arrays.asList(outerRuntime, bodyRuntime));
     }
 
     @Override
     public MathExpression visitForLoop(ForLoop node) {
         throw new UnsupportedOperationException("TODO");
-        /*return formatNode(node,
-                format("counter", node.getCounter()),
-                format("end", node.getEnd()),
-                format("change", node.getChange()),
-                format("body", node.getBody()));*/
     }
 
     @Override
     public MathExpression visitReturn(Return node) {
-        return visit(node.getValue());
+        return this.visit(node.getValue());
     }
 
     @Override
     public MathExpression visitIfElse(IfElse node) {
-    	List<MathExpression> body = new ArrayList<>();
-    	body.add(addAstNodes(node.getFalseBranch()));
-    	body.add(addAstNodes(node.getTrueBranch()));
-    	return new Addition(body);
+        List<MathExpression> body = new ArrayList<>();
+        body.add(addAstNodes(node.getFalseBranch()));
+        body.add(addAstNodes(node.getTrueBranch()));
+        return new Addition(body);
     }
 
     @Override
     public MathExpression visitSpecialCall(SpecialCall node) {
-    	switch(node.getMethodName()) {
-    	case "length":
-    		return new Constant(3);
-    	case "arrayget":
-    	case "arrayput":
-            return addAstNodes(node.getParameters());
-    		default:
-    			throw new IllegalArgumentException("what's " + node.getMethodName());
-    	}
+        switch(node.getMethodName()) {
+            case "length":
+                return this.outputComplexity.lookupExpression(node.getObject());
+            case "arrayget":
+            case "arrayput":
+                return addAstNodes(node.getParameters());
+            default:
+                throw new IllegalArgumentException("what's " + node.getMethodName());
+        }
     }
 
     @Override
     public MathExpression visitCall(Call node) {
-    	// TODO
+        // TODO
         throw new UnsupportedOperationException("Call is not yet implemented");
     }
 
     @Override
     public MathExpression visitBinOp(BinOp node) {
-    	List<MathExpression> list = new ArrayList<>();
-    	list.add(visit(node.getLeft()));
-    	list.add(visit(node.getRight()));
+        List<MathExpression> list = new ArrayList<>();
+        list.add(visit(node.getLeft()));
+        list.add(visit(node.getRight()));
         return new Addition(list);
     }
 
@@ -170,28 +130,20 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
         return new Constant(4);
     }
 
-	@Override
-	public MathExpression visitType(Type node) {
-		throw new IllegalStateException("asked for big-O runtime of a type declaration");
-	}
+    @Override
+    public MathExpression visitType(Type node) {
+        throw new IllegalStateException("asked for big-O runtime of a type declaration");
+    }
 
     @Override
     public MathExpression visitMultipleAstNodes(MultipleAstNodes node) {
         throw new IllegalStateException("MultipleAstNodes should never be in the final AST");
     }
-    
+
     private MathExpression addAstNodes(List<AstNode> list) {
-    	List<MathExpression> sum = new ArrayList<>();
-    	for (AstNode node : list)
-    		sum.add(visit(node));
-    	return new Addition(sum);
-    }
-    
-    private void addToAssumptionsTable(String variable) {
-    	if (symbols.isEmpty()) {
-			throw new IllegalStateException("Ran out of abstract symbols!");
-		}
-		assumptions.put(variable, symbols.remove());
-    	
+        List<MathExpression> sum = new ArrayList<>();
+        for (AstNode node : list)
+            sum.add(visit(node));
+        return new Addition(sum);
     }
 }
