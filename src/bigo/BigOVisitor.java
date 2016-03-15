@@ -35,6 +35,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
         this.methodSymbolVariables = new HashMap<>();
         Queue<String> functionSymbols = new LinkedList<>(Arrays.asList(FUNCTION_NAME));
         this.functionGenId = functionSymbols::remove;
+        this.methodSymbolVariables = new HashMap<>();
     }
 
     @Override
@@ -102,6 +103,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
         return new Multiplication(Arrays.asList(outerRuntime, bodyRuntime));
     }
 
+    // TODO: add the cost of evaluating the start, end, and change
     @Override
     public MathExpression visitForLoop(ForLoop node) {
     	AstNode counter = node.getCounter();
@@ -111,6 +113,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     	String loopVariable;
     	switch (counter.nodeName()) {
     		case "Assignment": 
+    			this.outputComplexity.recordVariable((Assignment)counter);
 	    		counterComplexity = this.outputComplexity.visit(((Assignment)counter).getValue());
 	    		loopVariable = ((Assignment)counter).getName();
 	    		break;
@@ -147,6 +150,46 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     		
     	}
     	
+    	switch (change.nodeName()) {
+	    	case "Assignment":
+	    		if (((Assignment)change).getName().equals(loopVariable)) {
+	    			switch(((Assignment)change).getValue().nodeName()) {
+			    		case "BinOp":
+			    			BinOp bop = (BinOp)((Assignment)change).getValue();
+			    			switch(bop.getOperator()) {
+			    				// TODO: make '-' actually negate the value
+					    		case "+":
+					    		case "-":
+					    			// Expect to find loopVariable on one side. Evaluate the output complexity of the other side.
+					    			AstNode left = bop.getLeft();
+					    			AstNode right = bop.getRight();
+					    			AstNode eval = null;
+					    			if (left instanceof Lookup && ((Lookup) left).getName().equals(loopVariable)) {
+					    				eval = right;
+					    			} else if (right instanceof Lookup && ((Lookup) right).getName().equals(loopVariable)) {
+					    				eval = left;
+					    			} else {
+					    				throw new IllegalArgumentException("The loop variable " + loopVariable + " needs to be contained in the for loop change");
+					    			}
+					    			changeComplexity = this.outputComplexity.visit(eval);
+					    			break;
+				    			default:
+				    				throw new IllegalArgumentException(((BinOp)end).getOperator() + " is not a supported binary operator in for loop change");
+			    			}
+			    		break;
+		    			default:
+		    				throw new IllegalArgumentException(((Assignment)change).getValue() + " is not supported in for loop counters");
+		    		}
+	    		} else {
+	    			throw new IllegalArgumentException("The loop variable must be updated on each iteration");
+	    		}
+	    		break;
+    		default:
+    			throw new IllegalArgumentException(change.nodeName() + " is not supported in for loop ends");
+    	}
+    	
+    	System.out.println(counterComplexity);
+    	System.out.println(endComplexity);
     	MathExpression numIterations = new Division(Arrays.asList(
     			new Subtraction(Arrays.asList(endComplexity, counterComplexity)),
     			changeComplexity));

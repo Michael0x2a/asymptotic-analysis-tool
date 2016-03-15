@@ -20,8 +20,8 @@ import visitors.SimplifierVisitor;
 public class ArraySumSimple {
 
 	public static void main(String[] args) throws IOException {
-		System.out.println(new SimpleGrammarPrettyPrint().visit(get()));
-		//System.out.println(new BigOVisitor().visit(get()).toEquation());
+		//System.out.println(new SimpleGrammarPrettyPrint().visit(get()));
+		System.out.println(new BigOVisitor().visit(get()).toEquation());
 	}
 
 	public static AstNode get() throws IOException {

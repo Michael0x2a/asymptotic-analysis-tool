@@ -113,8 +113,26 @@ public class OutputComplexityVisitor extends AstNodeVisitor<MathExpression> {
 
     @Override
     public MathExpression visitSpecialCall(SpecialCall node) {
-        // TODO Auto-generated method stub
-        return null;
+        AstNode object = node.getObject();
+        String methodName = node.getMethodName();
+        List<AstNode> parameters = node.getParameters();
+        
+        if (object.nodeName().equals("Lookup")) {
+    		String varName = ((Lookup)object).getName();
+        	if (methodName.equals("length")) {
+        		return assumptions.get(varName) != null ? assumptions.get(varName) : variables.get(varName);
+        	} else if (methodName.equals("arrayget")) {
+        		varName = varName + "arrayget";
+        		if (!assumptions.containsKey(varName)) {
+        			assumptions.put(varName, new Variable(this.variableGenId.get()));
+        		}
+        		return assumptions.get(varName);
+        	} else if (methodName.equals("arrayput")) {
+        		throw new AssertionError();
+        	}
+        }
+        
+        throw new UnsupportedOperationException("Unsupported special call: " + methodName);
     }
 
     @Override
@@ -134,7 +152,6 @@ public class OutputComplexityVisitor extends AstNodeVisitor<MathExpression> {
             case "-": return new Subtraction(list);
             case "*": return new Multiplication(list);
             case "/": return new Division(list);
-            case "<": 
         }
 
         throw new UnsupportedOperationException("The " + node.getOperator() + " symbol is currently not supported");
