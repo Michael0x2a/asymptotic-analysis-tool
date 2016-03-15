@@ -8,7 +8,7 @@ public class Variable implements MathExpression {
     }
 
     public String getName() {
-        return this.getName();
+        return this.name;
     }
 
     @Override
@@ -20,4 +20,8 @@ public class Variable implements MathExpression {
         return name;
     }
 
+    @Override
+    public <T> T accept(MathExpressionVisitor<T> visitor) {
+        return visitor.visitVariable(this);
+    }
 }

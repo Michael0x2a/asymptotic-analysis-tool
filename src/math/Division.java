@@ -3,7 +3,7 @@ package math;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class Division implements MathExpression {
+public class Division implements MathExpression, MultiTerm {
     protected List<MathExpression> terms;
 
     public Division(List<MathExpression> terms) {
@@ -28,4 +28,8 @@ public class Division implements MathExpression {
         return output.toString();
     }
 
+    @Override
+    public <T> T accept(MathExpressionVisitor<T> visitor) {
+        return visitor.visitDivision(this);
+    }
 }

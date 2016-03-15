@@ -1,6 +1,7 @@
 package main;
 
 import bigo.BigOVisitor;
+import bigo.EquationSimplifier;
 import bigo.SimpleGrammarPrettyPrint;
 import math.MathExpression;
 import org.antlr.v4.runtime.ANTLRFileStream;
@@ -98,6 +99,7 @@ public class Main {
             // Generate raw equation
             MathExpression rawEq = new BigOVisitor().visit(simpleAst);
             System.out.println(rawEq.toEquation());
+            System.out.println(new EquationSimplifier().visit(rawEq).toEquation());
         } catch (Exception e) {
             System.err.println("parser exception: " + e);
             e.printStackTrace();   // so we can get stack trace

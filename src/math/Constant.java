@@ -20,4 +20,9 @@ public class Constant implements MathExpression {
         return String.valueOf(value);
     }
 
+    @Override
+    public <T> T accept(MathExpressionVisitor<T> visitor) {
+        return visitor.visitConstant(this);
+    }
+
 }

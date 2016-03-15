@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class Addition implements MathExpression {
+public class Addition implements MathExpression, MultiTerm {
     protected List<MathExpression> terms;
 
     public Addition(MathExpression ... terms) {
@@ -33,4 +33,8 @@ public class Addition implements MathExpression {
         return output.toString();
     }
 
+    @Override
+    public <T> T accept(MathExpressionVisitor<T> visitor) {
+        return visitor.visitAddition(this);
+    }
 }

@@ -22,4 +22,9 @@ public class Log implements MathExpression {
         return "log(" + expression.toEquation() + ")";
     }
 
+    @Override
+    public <T> T accept(MathExpressionVisitor<T> visitor) {
+        return visitor.visitLog(this);
+    }
+
 }

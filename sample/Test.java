@@ -1,14 +1,10 @@
 public class Test {
-    public static int test(int[] a, int[] b) {
-        int sum = 0;
-        for (int i : a) {
-            for (int j : b) {
-                for (int k : a) {
-                    sum += 1;
-                }
-            }
+    public static int test(int a) {
+        if (a == 1) {
+            return 2;
+        } else {
+            return 3 + test(a / 2) + test(a / 2);
         }
-        return sum;
     }
 
     public int foo() {

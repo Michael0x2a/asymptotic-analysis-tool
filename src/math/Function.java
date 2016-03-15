@@ -7,7 +7,7 @@ public class Function implements MathExpression {
     private String functionName;
     private List<MathExpression> parameters;
 
-    public Function(String FunctionName, List<MathExpression> parameters) {
+    public Function(String functionName, List<MathExpression> parameters) {
         this.functionName = functionName;
         this.parameters = parameters;
     }
@@ -33,5 +33,10 @@ public class Function implements MathExpression {
         }
 
         return this.functionName + joiner.toString();
+    }
+
+    @Override
+    public <T> T accept(MathExpressionVisitor<T> visitor) {
+        return visitor.visitFunction(this);
     }
 }

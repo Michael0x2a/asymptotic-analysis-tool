@@ -33,4 +33,9 @@ public class Negation implements MathExpression {
     public String toEquation() {
         return "-" + this.expression.toEquation();
     }
+
+    @Override
+    public <T> T accept(MathExpressionVisitor<T> visitor) {
+        return visitor.visitNegation(this);
+    }
 }

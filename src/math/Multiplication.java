@@ -3,14 +3,14 @@ package math;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class Multiplication implements MathExpression {
+public class Multiplication implements MathExpression, MultiTerm {
     private List<MathExpression> terms;
 
     public Multiplication(List<MathExpression> terms) {
         this.terms = terms;
     }
 
-    private List<MathExpression> getTerms() {
+    public List<MathExpression> getTerms() {
         return this.terms;
     }
 
@@ -26,5 +26,10 @@ public class Multiplication implements MathExpression {
             output.add(e.toEquation());
         }
         return output.toString();
+    }
+
+    @Override
+    public <T> T accept(MathExpressionVisitor<T> visitor) {
+        return visitor.visitMultiplication(this);
     }
 }
