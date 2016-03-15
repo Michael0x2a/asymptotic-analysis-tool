@@ -112,10 +112,12 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     	AstNode change = node.getChange();
     	MathExpression startComplexity, endComplexity, bodyComplexity;
     	String loopVariable;
+    	String abstractSymbol;
     	switch (counter.nodeName()) {
     		case "Assignment": 
 	    		startComplexity = this.outputComplexity.visit(((Assignment)counter).getValue());
 	    		loopVariable = ((Assignment)counter).getName();
+	    		abstractSymbol = this.outputComplexity.recordAssumption(new Lookup(loopVariable)).getName();
 	    		break;
     		default:
     			throw new IllegalArgumentException(counter.nodeName() + " is not supported in for loop counters");
@@ -139,7 +141,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 		    				throw new IllegalArgumentException("The loop variable " + loopVariable + " needs to be contained in the for loop end");
 		    			}
 		    			endComplexity = this.outputComplexity.visit(eval);
-			    		this.outputComplexity.recordVariable(((Assignment)counter).getName(), endComplexity);
+			    		//this.outputComplexity.recordVariable(((Assignment)counter).getName(), endComplexity);
 		    			break;
 	    			default:
 	    				throw new IllegalArgumentException(((BinOp)end).getOperator() + " is not a supported binary operator in for loop end");
@@ -189,7 +191,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     			throw new IllegalArgumentException(change.nodeName() + " is not supported in for loop ends");
     	}
     	List<AstNode> body = node.getBody();
-    	return new Sum(startComplexity, endComplexity, addAstNodes(body), new Variable(loopVariable));    	
+    	return new Sum(startComplexity, endComplexity, addAstNodes(body), new Variable(abstractSymbol));    	
     }
 
     @Override
@@ -272,5 +274,13 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
         for (AstNode node : list)
             sum.add(visit(node));
         return new Addition(sum);
+    }
+    
+    public Map<String, MathExpression> getVariables() {
+    	return this.outputComplexity.getVariables();
+    }
+    
+    public Map<String, Variable> getAssumptions() {
+    	return this.outputComplexity.getAssumptions();
     }
 }
