@@ -18,6 +18,7 @@ import grammar.*;
 import simplegrammar.AstNode;
 import visitors.PrettyPrintVisitor;
 import visitors.SimplifierVisitor;
+import wolfram.WolframQuery;
 
 public class Main {
     public static void main(String[] args) {
@@ -97,9 +98,23 @@ public class Main {
             System.out.println(new SimpleGrammarPrettyPrint().visit(simpleAst));
 
             // Generate raw equation
-            MathExpression rawEq = new BigOVisitor().visit(simpleAst);
+            BigOVisitor b = new BigOVisitor();
+            MathExpression rawEq = b.visit(simpleAst);
             System.out.println(rawEq.toEquation());
-            System.out.println(new EquationSimplifier().visit(rawEq).toEquation());
+
+            // Generate simplified equation
+            String simplified = new EquationSimplifier().visit(rawEq).toEquation();
+            System.out.println(simplified);
+
+            // Call wolfram
+            WolframQuery wolf = new WolframQuery();
+            String solved = wolf.getWolframPlaintext(simplified);
+            System.out.println(solved);
+            solved = solved == null ? simplified : solved;
+            System.out.println(solved);
+
+            // Print assumptions
+            System.out.println(b.getAssumptions());
         } catch (Exception e) {
             System.err.println("parser exception: " + e);
             e.printStackTrace();   // so we can get stack trace

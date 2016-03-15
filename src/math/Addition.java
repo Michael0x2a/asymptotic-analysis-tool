@@ -12,7 +12,7 @@ public class Addition implements MathExpression, MultiTerm {
     }
 
     public Addition(List<MathExpression> terms) {
-        this.terms = terms;
+        this.terms = failOnEmpty(terms);
     }
 
     public List<MathExpression> getTerms() {

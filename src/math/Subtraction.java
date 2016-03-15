@@ -8,7 +8,7 @@ public class Subtraction implements MathExpression, MultiTerm {
     private List<MathExpression> terms;
 
     public Subtraction(List<MathExpression> terms) {
-        this.terms = terms;
+        this.terms = failOnEmpty(terms);
     }
 
     public List<MathExpression> getTerms() {

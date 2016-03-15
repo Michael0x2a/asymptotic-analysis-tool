@@ -7,7 +7,7 @@ public class Division implements MathExpression, MultiTerm {
     protected List<MathExpression> terms;
 
     public Division(List<MathExpression> terms) {
-        this.terms = terms;
+        this.terms = failOnEmpty(terms);
     }
 
     public List<MathExpression> getTerms() {

@@ -238,7 +238,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
                 .map(this.outputComplexity::lookupExpression).collect(Collectors.toList());
 
         if (this.builtinComplexity.containsKey(methodName)) {
-            runtime.add(this.methodRuntimeComplexities.get(methodName));
+            runtime.add(this.builtinComplexity.get(methodName));
             return new Addition(runtime);
         } else if (this.methodRuntimeComplexities.containsKey(methodName)) {
             runtime.add(this.methodRuntimeComplexities.get(methodName));
@@ -282,8 +282,12 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 
     private MathExpression addAstNodes(List<AstNode> list) {
         List<MathExpression> sum = new ArrayList<>();
-        for (AstNode node : list)
+        for (AstNode node : list) {
             sum.add(visit(node));
+        }
+        if (sum.size() == 0) {
+            sum.add(new Constant(0));
+        }
         return new Addition(sum);
     }
 

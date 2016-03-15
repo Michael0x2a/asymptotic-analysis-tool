@@ -87,7 +87,7 @@ public class EquationSimplifier implements MathExpressionVisitor<MathExpression>
 
     @Override
     public MathExpression visitFunction(Function expr) {
-        return new Function(expr.getFunctionName(), this.simplify(expr.getParameters()));
+        return new Function(expr.getFunctionName(), expr.getParameters());
     }
 
     @Override

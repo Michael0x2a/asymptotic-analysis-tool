@@ -7,7 +7,7 @@ public class Multiplication implements MathExpression, MultiTerm {
     private List<MathExpression> terms;
 
     public Multiplication(List<MathExpression> terms) {
-        this.terms = terms;
+        this.terms = failOnEmpty(terms);
     }
 
     public List<MathExpression> getTerms() {

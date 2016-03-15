@@ -36,10 +36,10 @@ public class Sum implements MathExpression {
 
     @Override
     public String toEquation() {
-        return String.format("(sum %s, %s=%s to %s)",
-                removeExtraParens(this.end.toEquation()),
+        return String.format("(sum from %s=%s to %s of %s)",
                 this.index.toEquation(),
                 removeExtraParens(this.start.toEquation()),
+                removeExtraParens(this.end.toEquation()),
                 this.body.toEquation());
     }
 

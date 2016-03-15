@@ -7,9 +7,6 @@ public class SelectionSort {
 			for (int j = i; j < arr.length; j++) {
 				if (arr[j] < arr[minIndex])
 					minIndex = j;
-				else {
-					System.out.println("Hello!");
-				}
 			}
 			// Swap smallest found with element in position i
 			temp = arr[minIndex];

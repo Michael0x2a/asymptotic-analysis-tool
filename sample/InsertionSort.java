@@ -10,5 +10,7 @@ public class InsertionSort {
 				}
 			}
 		}
+		System.out.println(3);
+		System.out.println("foo");
 	}
 }
