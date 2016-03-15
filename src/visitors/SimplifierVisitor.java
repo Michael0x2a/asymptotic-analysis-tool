@@ -214,7 +214,7 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
         String methodName = ctx.getText().split("\\(")[0];
         List<Java8Parser.ExpressionContext> args = ctx.argumentList().expression();
         List<AstNode> params = new ArrayList<>();
-        for (int i = 0; i < args.size(); i+= 2) {
+        for (int i = 0; i < args.size(); i+= 1) {
             params.add(this.visit(args.get(i)));
         }
         return new Call(methodName, params);
@@ -226,7 +226,7 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
         String methodName = ctx.getText().split("\\(")[0];
         List<Java8Parser.ExpressionContext> args = ctx.argumentList().expression();
         List<AstNode> params = new ArrayList<>();
-        for (int i = 0; i < args.size(); i+= 2) {
+        for (int i = 0; i < args.size(); i+= 1) {
             params.add(this.visit(args.get(i)));
         }
         return new Call(methodName, params);

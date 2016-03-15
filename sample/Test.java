@@ -1,13 +1,17 @@
 public class Test {
-    public static int test(int a) {
-        if (a == 1) {
-            return 2;
-        } else {
-            return 3 + test(a / 2) + test(a / 2);
+    public static int test(int[] a) {
+        int sum = 0;
+        for (int b : a) {
+            foo(3);
         }
+        return sum;
     }
 
-    public int foo() {
-        System.out.println("Hello!");
+    public int foo(int count) {
+        int sum = 0;
+        for (int i = 0; i < count; i++) {
+            sum += 1;
+        }
+        return sum;
     }
 }

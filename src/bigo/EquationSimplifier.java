@@ -3,6 +3,7 @@ package bigo;
 import math.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
@@ -46,7 +47,7 @@ public class EquationSimplifier implements MathExpressionVisitor<MathExpression>
     }
 
     private List<MathExpression> mergeConstantIfAble(List<MathExpression> exprs, Optional<Constant> constant) {
-        if (constant.isPresent()) {
+        if (exprs.size() == 0 && constant.isPresent()) {
             exprs.add(constant.get());
         }
         return exprs;
@@ -116,19 +117,25 @@ public class EquationSimplifier implements MathExpressionVisitor<MathExpression>
 
     @Override
     public MathExpression visitSum(Sum expr) {
-        return new Sum(
-                this.visit(expr.getStart()),
-                this.visit(expr.getEnd()),
-                this.visit(expr.getBody()),
-                expr.getIndex());
+        MathExpression start = this.visit(expr.getStart());
+        MathExpression end = this.visit(expr.getEnd());
+        MathExpression body = this.visit(expr.getBody());
+
+        if (body.nodeName().equals("Constant") && start.nodeName().equals("Constant")) {
+            return this.visit(new Multiplication(Arrays.asList(
+                    new Subtraction(Arrays.asList(end, start)),
+                    body)));
+        } else {
+            return new Sum(start, end, body, expr.getIndex());
+        }
     }
 
     @Override
-    public MathExpression visitRecursiveCall(RecursiveCall expr) {
-        return new RecursiveCall(
+    public MathExpression visitFunctionCall(FunctionCall expr) {
+        return new FunctionCall(
                 expr.getFunction(),
                 expr.getParameters(),
                 this.visit(expr.getRecursiveCase()),
-                this.visit(expr.getBaseCase()));
+                expr.getBaseCase() == null ? null : this.visit(expr.getBaseCase()));
     }
 }

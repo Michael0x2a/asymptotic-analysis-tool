@@ -11,7 +11,7 @@ public interface MathExpressionVisitor<T> {
     T visitSubtraction(Subtraction expr);
     T visitVariable(Variable expr);
     T visitSum(Sum expr);
-    T visitRecursiveCall(RecursiveCall expr);
+    T visitFunctionCall(FunctionCall expr);
 
     default T visit(MathExpression expr) {
         return expr.accept(this);
