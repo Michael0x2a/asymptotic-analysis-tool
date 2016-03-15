@@ -217,8 +217,10 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
             case "arrayget":
             case "arrayput":
                 return addAstNodes(node.getParameters());
+            case "arraycreation":
+                return this.outputComplexity.visit(node);
             default:
-                throw new IllegalArgumentException("what's " + node.getMethodName());
+                throw new UnsupportedOperationException("Unsupported special call: " + node.getMethodName());
         }
     }
 

@@ -8,7 +8,7 @@ public class SpecialCall implements AstNode {
     private List<AstNode> parameters;
 
     public SpecialCall(AstNode object, String methodName, List<AstNode> parameters) {
-        this.object = notNull(object);
+        this.object = object;
         this.methodName = notNull(methodName);
         this.parameters = notNull(parameters);
     }

@@ -29,7 +29,7 @@ public class Function implements MathExpression {
     public String toEquation() {
         StringJoiner joiner = new StringJoiner(", ", "(", ")");
         for (MathExpression param : this.parameters) {
-            joiner.add(param.toEquation());
+            joiner.add(removeExtraParens(param.toEquation()));
         }
 
         return this.functionName + joiner.toString();

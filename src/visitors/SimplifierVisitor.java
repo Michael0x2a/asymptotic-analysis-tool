@@ -2,6 +2,7 @@ package visitors;
 
 import grammar.Java8BaseVisitor;
 import grammar.Java8Parser;
+import org.antlr.v4.runtime.ParserRuleContext;
 import simplegrammar.*;
 
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
             out.add(node);
             return out;
         }
+    }
+
+    private void debug(ParserRuleContext node) {
+        System.err.println(new PrettyPrintVisitor(parser).visit(node));
     }
 
     @Override
@@ -117,7 +122,11 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
     @Override
     public AstNode visitStatementWithoutTrailingSubstatement(Java8Parser.StatementWithoutTrailingSubstatementContext ctx) {
         if (ctx.returnStatement() != null) {
-            return new Return(this.visit(ctx.returnStatement().expression()));
+            if (ctx.returnStatement().expression() == null) {
+                return new Return(new Literal("0"));
+            } else {
+                return new Return(this.visit(ctx.returnStatement().expression()));
+            }
         } else if (ctx.emptyStatement() != null) {
             return new MultipleAstNodes();  // Return empty list
         } else if (ctx.expressionStatement() != null) {
@@ -203,7 +212,11 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
     public AstNode visitMethodInvocation(Java8Parser.MethodInvocationContext ctx) {
         // TODO: Make method invocation less ghetto
         String methodName = ctx.getText().split("\\(")[0];
-        List<AstNode> params = ctx.argumentList().children.stream().map(this::visit).collect(Collectors.toList());
+        List<Java8Parser.ExpressionContext> args = ctx.argumentList().expression();
+        List<AstNode> params = new ArrayList<>();
+        for (int i = 0; i < args.size(); i+= 2) {
+            params.add(this.visit(args.get(i)));
+        }
         return new Call(methodName, params);
     }
 
@@ -211,7 +224,11 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
     public AstNode visitMethodInvocation_lfno_primary(Java8Parser.MethodInvocation_lfno_primaryContext ctx) {
         // TODO: Make method invocation less ghetto
         String methodName = ctx.getText().split("\\(")[0];
-        List<AstNode> params = ctx.argumentList().children.stream().map(this::visit).collect(Collectors.toList());
+        List<Java8Parser.ExpressionContext> args = ctx.argumentList().expression();
+        List<AstNode> params = new ArrayList<>();
+        for (int i = 0; i < args.size(); i+= 2) {
+            params.add(this.visit(args.get(i)));
+        }
         return new Call(methodName, params);
     }
 
@@ -456,7 +473,16 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
     @Override
     public AstNode visitPrimary(Java8Parser.PrimaryContext ctx) {
         if (ctx.arrayCreationExpression() != null) {
-            throw new UnsupportedOperationException("Array creation currently not supported");
+            Java8Parser.ArrayCreationExpressionContext arr = ctx.arrayCreationExpression();
+            Type type = new Type(arr.primitiveType().getText() + "[]");
+
+            if (arr.dimExprs().dimExpr().size() != 1) {
+                throw new UnsupportedOperationException("Only 1D arrays are currently supported");
+            }
+
+            AstNode size = this.visit(arr.dimExprs().dimExpr().get(0).expression());
+
+            return new SpecialCall(type, "arraycreation", Arrays.asList(type, size));
         } else if (ctx.primaryNoNewArray_lfno_primary() != null){
             return this.visit(ctx.primaryNoNewArray_lfno_primary());
         } else {

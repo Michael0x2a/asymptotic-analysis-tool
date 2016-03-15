@@ -129,20 +129,24 @@ public class OutputComplexityVisitor extends AstNodeVisitor<MathExpression> {
         AstNode object = node.getObject();
         String methodName = node.getMethodName();
         List<AstNode> parameters = node.getParameters();
-        
+
         if (object.nodeName().equals("Lookup")) {
-    		String varName = ((Lookup)object).getName();
-        	if (methodName.equals("length")) {
-        		return assumptions.get(varName) != null ? assumptions.get(varName) : variables.get(varName);
-        	} else if (methodName.equals("arrayget")) {
-        		varName = varName + "arrayget";
-        		if (!assumptions.containsKey(varName)) {
-        			assumptions.put(varName, new Variable(this.variableGenId.get()));
-        		}
-        		return assumptions.get(varName);
-        	} else if (methodName.equals("arrayput")) {
-        		throw new AssertionError();
-        	}
+            String varName = ((Lookup)object).getName();
+            if (methodName.equals("length")) {
+                return assumptions.get(varName) != null ? assumptions.get(varName) : variables.get(varName);
+            } else if (methodName.equals("arrayget")) {
+                varName = varName + "arrayget";
+                if (!assumptions.containsKey(varName)) {
+                    assumptions.put(varName, new Variable(this.variableGenId.get()));
+                }
+                return assumptions.get(varName);
+            } else if (methodName.equals("arrayput")) {
+                throw new AssertionError();
+            }
+        } else if (methodName.equals("arraycreation")) {
+            Type arrayType = (Type) parameters.get(0);
+            AstNode length = parameters.get(1);
+            return this.visit(length);
         }
         
         throw new UnsupportedOperationException("Unsupported special call: " + methodName);

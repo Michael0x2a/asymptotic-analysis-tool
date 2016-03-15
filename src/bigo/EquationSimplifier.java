@@ -61,9 +61,17 @@ public class EquationSimplifier implements MathExpressionVisitor<MathExpression>
         return this.mergeConstantIfAble(nonConstants, constant);
     }
 
+    private <T extends MultiTerm> MathExpression bust(T node) {
+        if (node.getTerms().size() == 1) {
+            return node.getTerms().get(0);
+        } else {
+            return node;
+        }
+    }
+
     @Override
     public MathExpression visitAddition(Addition expr) {
-        return new Addition(this.collapse(Addition.class, expr.getTerms(), (a, b) -> a + b));
+        return this.bust(new Addition(this.collapse(Addition.class, expr.getTerms(), (a, b) -> a + b)));
     }
 
     @Override
@@ -88,7 +96,7 @@ public class EquationSimplifier implements MathExpressionVisitor<MathExpression>
 
     @Override
     public MathExpression visitMultiplication(Multiplication expr) {
-        return new Multiplication(this.collapse(Multiplication.class, expr.getTerms(), (a, b) -> a * b));
+        return this.bust(new Multiplication(this.collapse(Multiplication.class, expr.getTerms(), (a, b) -> a * b)));
     }
 
     @Override
@@ -98,7 +106,7 @@ public class EquationSimplifier implements MathExpressionVisitor<MathExpression>
 
     @Override
     public MathExpression visitSubtraction(Subtraction expr) {
-        return new Subtraction(this.collapse(Subtraction.class, expr.getTerms(), (a, b) -> a - b));
+        return this.bust(new Subtraction(this.collapse(Subtraction.class, expr.getTerms(), (a, b) -> a - b)));
     }
 
     @Override

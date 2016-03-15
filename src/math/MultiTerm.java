@@ -2,6 +2,6 @@ package math;
 
 import java.util.List;
 
-public interface MultiTerm {
+public interface MultiTerm extends MathExpression {
     List<MathExpression> getTerms();
 }
