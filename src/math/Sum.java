@@ -20,6 +20,6 @@ public class Sum implements MathExpression {
 
 	@Override
 	public String toEquation() {
-		return "(sum from " + index.toEquation() + " " + start.toEquation() + " to " + end.toEquation() + " of " + body.toEquation() + ")";
+		return "(sum from " + index.toEquation() + "=" + start.toEquation() + " to " + end.toEquation() + " of " + body.toEquation() + ")";
 	}
 }

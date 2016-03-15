@@ -45,6 +45,11 @@ public class OutputComplexityVisitor extends AstNodeVisitor<MathExpression> {
         this.variables.put(asgn.getName(), expr);
         return expr;
     }
+    
+    public MathExpression recordVariable(String variableName, MathExpression expr) {
+    	this.variables.put(variableName, expr);
+    	return expr;
+    }
 
     public MathExpression lookupExpression(AstNode variable) {
         return this.visit(variable);

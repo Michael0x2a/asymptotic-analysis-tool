@@ -12,6 +12,7 @@ import math.Division;
 import math.MathExpression;
 import math.Multiplication;
 import math.Subtraction;
+import math.Sum;
 import math.Variable;
 import math.Function;
 
@@ -109,12 +110,11 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     	AstNode counter = node.getCounter();
     	AstNode end = node.getEnd();
     	AstNode change = node.getChange();
-    	MathExpression counterComplexity, endComplexity, changeComplexity;
+    	MathExpression startComplexity, endComplexity, bodyComplexity;
     	String loopVariable;
     	switch (counter.nodeName()) {
     		case "Assignment": 
-    			this.outputComplexity.recordVariable((Assignment)counter);
-	    		counterComplexity = this.outputComplexity.visit(((Assignment)counter).getValue());
+	    		startComplexity = this.outputComplexity.visit(((Assignment)counter).getValue());
 	    		loopVariable = ((Assignment)counter).getName();
 	    		break;
     		default:
@@ -124,10 +124,9 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     	switch (end.nodeName()) {
 	    	case "BinOp":
 	    		switch(((BinOp)end).getOperator()) {
+	    			// TODO: distinguish the +/- 1
 		    		case "<":
 		    		case "<=":
-		    		case ">":
-		    		case ">=":
 		    			// Expect to find loopVariable on one side. Evaluate the output complexity of the other side.
 		    			AstNode left = ((BinOp)end).getLeft();
 		    			AstNode right = ((BinOp)end).getRight();
@@ -140,6 +139,7 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 		    				throw new IllegalArgumentException("The loop variable " + loopVariable + " needs to be contained in the for loop end");
 		    			}
 		    			endComplexity = this.outputComplexity.visit(eval);
+			    		this.outputComplexity.recordVariable(((Assignment)counter).getName(), endComplexity);
 		    			break;
 	    			default:
 	    				throw new IllegalArgumentException(((BinOp)end).getOperator() + " is not a supported binary operator in for loop end");
@@ -157,10 +157,8 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 			    		case "BinOp":
 			    			BinOp bop = (BinOp)((Assignment)change).getValue();
 			    			switch(bop.getOperator()) {
-			    				// TODO: make '-' actually negate the value
 					    		case "+":
-					    		case "-":
-					    			// Expect to find loopVariable on one side. Evaluate the output complexity of the other side.
+					    			// Expect to find loopVariable on one side. Check that the other side is the 1 literal.
 					    			AstNode left = bop.getLeft();
 					    			AstNode right = bop.getRight();
 					    			AstNode eval = null;
@@ -171,7 +169,10 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
 					    			} else {
 					    				throw new IllegalArgumentException("The loop variable " + loopVariable + " needs to be contained in the for loop change");
 					    			}
-					    			changeComplexity = this.outputComplexity.visit(eval);
+					    			boolean ok = eval.nodeName().equals("Literal") && ((Literal)eval).getText().equals("1");
+					    			if (!ok) {
+					    				throw new IllegalArgumentException("For loops must increment by 1");
+					    			}
 					    			break;
 				    			default:
 				    				throw new IllegalArgumentException(((BinOp)end).getOperator() + " is not a supported binary operator in for loop change");
@@ -187,15 +188,8 @@ public class BigOVisitor extends AstNodeVisitor<MathExpression> {
     		default:
     			throw new IllegalArgumentException(change.nodeName() + " is not supported in for loop ends");
     	}
-    	
-    	System.out.println(counterComplexity);
-    	System.out.println(endComplexity);
-    	MathExpression numIterations = new Division(Arrays.asList(
-    			new Subtraction(Arrays.asList(endComplexity, counterComplexity)),
-    			changeComplexity));
     	List<AstNode> body = node.getBody();
-    	
-    	return new Multiplication(Arrays.asList(addAstNodes(body), numIterations));
+    	return new Sum(startComplexity, endComplexity, addAstNodes(body), new Variable(loopVariable));    	
     }
 
     @Override
