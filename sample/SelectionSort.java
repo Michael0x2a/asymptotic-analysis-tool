@@ -1,10 +1,10 @@
 public class SelectionSort {
 	public void selectionSort(int[] arr) {
-		int i, j, minIndex, temp;
-		for (i = 0; i < arr.length; i++) {
+		int minIndex, temp;
+		for (int i = 0; i < arr.length; i++) {
 			// Locate smallest element between positions i and arr.length - 1
 			minIndex = i;
-			for (j = i; j < arr.length; j++) {
+			for (int j = i; j < arr.length; j++) {
 				if (arr[j] < arr[minIndex])
 					minIndex = j;
 				else {

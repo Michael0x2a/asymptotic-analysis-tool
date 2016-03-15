@@ -35,6 +35,13 @@ public class Utils {
         return new PluckVisitor(filterFunc).visit(root);
     }
 
+    public static boolean isRecursiveFunction(MethodDecl method) {
+        List<AstNode> methodCalls = Utils.pluck(Call.class, method);
+        return methodCalls.stream()
+                .map(m -> (Call) m)
+                .anyMatch(m -> m.getMethodName().equals(method.getName()));
+    }
+
 
     private static class PluckVisitor extends AstNodeVisitor<List<AstNode>> {
         private Predicate<AstNode> filterFunc;

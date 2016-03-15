@@ -174,11 +174,14 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
                 throw new UnsupportedOperationException("For loops w/ multiple statements are not allowed");
             }
 
+            AstNode variableDecl = null;
             AstNode init;
             if (loop.forInit().statementExpressionList() != null) {
                 init = this.visit(loop.forInit().statementExpressionList().statementExpression(0));
             } else {
-                init = expand(this.visit(loop.forInit().localVariableDeclaration())).get(0);
+                List<AstNode> statements = expand(this.visit(loop.forInit().localVariableDeclaration()));
+                variableDecl = statements.get(0);
+                init = statements.get(1);
             }
 
             AstNode expr = this.visit(loop.expression());
@@ -187,7 +190,12 @@ public class SimplifierVisitor extends Java8BaseVisitor<AstNode> {
 
             List<AstNode> body = expand(this.visit(loop.statement()));
 
-            return new ForLoop(init, expr, update, body);
+            AstNode forLoop = new ForLoop(init, expr, update, body);
+            if (variableDecl != null) {
+                return new MultipleAstNodes(variableDecl, forLoop);
+            } else {
+                return forLoop;
+            }
         }
     }
 

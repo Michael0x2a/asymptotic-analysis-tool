@@ -114,4 +114,13 @@ public class EquationSimplifier implements MathExpressionVisitor<MathExpression>
                 this.visit(expr.getBody()),
                 expr.getIndex());
     }
+
+    @Override
+    public MathExpression visitRecursiveCall(RecursiveCall expr) {
+        return new RecursiveCall(
+                expr.getFunction(),
+                expr.getParameters(),
+                this.visit(expr.getRecursiveCase()),
+                this.visit(expr.getBaseCase()));
+    }
 }
