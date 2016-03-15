@@ -52,5 +52,6 @@ public class MergeSort {
         AstNode node = new SimplifierVisitor(parser).visit(t);
         return node;
 	}
+	
 
 }
