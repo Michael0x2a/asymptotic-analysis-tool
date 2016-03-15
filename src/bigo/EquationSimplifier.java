@@ -105,4 +105,13 @@ public class EquationSimplifier implements MathExpressionVisitor<MathExpression>
     public MathExpression visitVariable(Variable expr) {
         return expr;
     }
+
+    @Override
+    public MathExpression visitSum(Sum expr) {
+        return new Sum(
+                this.visit(expr.getStart()),
+                this.visit(expr.getEnd()),
+                this.visit(expr.getBody()),
+                expr.getIndex());
+    }
 }
